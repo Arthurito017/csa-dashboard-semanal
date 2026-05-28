@@ -1,13 +1,27 @@
 <!DOCTYPE html>
-<!-- saved from url=(0073)file:///C:/Users/Arthur%20Rodrigues/Downloads/csa_dashboard_system_4.html -->
-<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CSA Dashboard · Cebraspe</title>
-<script src="./index_files/xlsx.full.min.js.baixados"></script>
-<script src="./index_files/chart.umd.min.js.baixados"></script>
-<script src="./index_files/jspdf.umd.min.js.baixados"></script>
-<script src="./index_files/html2canvas.min.js.baixados"></script>
+<script>
+// Carrega scripts externos de forma sequencial e confiável
+async function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = () => reject(new Error('Falha ao carregar: ' + src));
+    document.head.appendChild(s);
+  });
+}
+window._libsReady = (async () => {
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+})();
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 :root{
@@ -183,13 +197,13 @@ a.lnk:hover{text-decoration:underline;}
 </head>
 <body>
 
-<div id="loading" style="display: none;">
+<div id="loading">
   <div style="font-size:28px;margin-bottom:8px;">📊</div>
   <div class="spinner"></div>
   <div class="loading-text">Carregando CSA Dashboard...</div>
 </div>
 
-<div id="app" style="display: flex;">
+<div id="app" style="display:none;">
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sidebar-logo">
@@ -199,14 +213,14 @@ a.lnk:hover{text-decoration:underline;}
     </div>
     <div class="sidebar-nav">
       <div class="nav-section">Menu</div>
-      <div class="nav-item active" onclick="navTo(&#39;historico&#39;)"><span class="nav-icon">🗂</span> Histórico</div>
-      <div class="nav-item" onclick="navTo(&#39;nova&#39;)"><span class="nav-icon">➕</span> Nova Semana</div>
+      <div class="nav-item active" onclick="navTo('historico')"><span class="nav-icon">🗂</span> Histórico</div>
+      <div class="nav-item" onclick="navTo('nova')"><span class="nav-icon">➕</span> Nova Semana</div>
       <div class="nav-section" style="margin-top:8px;">Análise</div>
-      <div class="nav-item" onclick="navTo(&#39;comparativo&#39;)"><span class="nav-icon">📈</span> Comparativo</div>
-      <div class="nav-item" onclick="navTo(&#39;intercorrencias&#39;)"><span class="nav-icon">⚠️</span> Intercorrências</div>
+      <div class="nav-item" onclick="navTo('comparativo')"><span class="nav-icon">📈</span> Comparativo</div>
+      <div class="nav-item" onclick="navTo('intercorrencias')"><span class="nav-icon">⚠️</span> Intercorrências</div>
     </div>
     <div class="sidebar-bottom">
-      <div class="semanas-count" id="sidebarCount">1 semana salva</div>
+      <div class="semanas-count" id="sidebarCount">— semanas salvas</div>
     </div>
   </div>
 
@@ -224,17 +238,15 @@ a.lnk:hover{text-decoration:underline;}
           <div class="page-title">Semanas Registradas</div>
           <div class="page-sub">Clique em uma semana para ver o dashboard completo</div>
         </div>
-        <button class="btn primary" onclick="navTo(&#39;nova&#39;)">➕ Nova semana</button>
+        <button class="btn primary" onclick="navTo('nova')">➕ Nova semana</button>
       </div>
-      <div id="semanasGrid" class="semanas-grid"><div class="semana-card" onclick="verSemana(&#39;5b443a18-af58-4c24-8a86-c91527b7eb32&#39;)">
-      <div class="semana-badge">2026</div>
-      <button class="btn-excluir-card" title="Excluir semana" onclick="event.stopPropagation();confirmarExcluirSemana(&#39;5b443a18-af58-4c24-8a86-c91527b7eb32&#39;)">🗑</button>
-      <div class="semana-periodo">📅 18/05/2026 → 22/05/2026</div>
-      <div class="semana-stats">
-        <div class="semana-stat"><strong>95</strong>atividades</div>
-        <div class="semana-stat red"><strong>1</strong>intercorrências</div>
+      <div id="semanasGrid" class="semanas-grid">
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <div class="empty-title">Nenhuma semana ainda</div>
+          <div class="empty-sub">Importe a primeira planilha<br>para começar o histórico.</div>
+        </div>
       </div>
-    </div></div>
     </div>
 
     <!-- PÁGINA: NOVA SEMANA -->
@@ -247,7 +259,7 @@ a.lnk:hover{text-decoration:underline;}
       </div>
 
       <!-- UPLOAD -->
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById(&#39;fileInput&#39;).click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
         <div class="upload-icon" id="uploadIcon">📁</div>
         <h3 id="uploadTitle">Importar planilha do Zoho</h3>
         <p id="uploadSub">Arraste ou clique para selecionar o Excel exportado</p>
@@ -298,8 +310,8 @@ a.lnk:hover{text-decoration:underline;}
         <div class="interc-list" id="intercList"></div>
       </div>
 
-      <div style="display:flex;gap:10px;" id="saveActions">
-        <button class="btn primary" id="btnSalvar" onclick="salvarSemana()" disabled="">💾 Salvar semana no banco</button>
+      <div style="display:flex;gap:10px;" id="saveActions" style="display:none;">
+        <button class="btn primary" id="btnSalvar" onclick="salvarSemana()" disabled>💾 Salvar semana no banco</button>
         <button class="btn" onclick="resetNova()">✕ Cancelar</button>
       </div>
     </div>
@@ -307,7 +319,7 @@ a.lnk:hover{text-decoration:underline;}
     <!-- PÁGINA: DASHBOARD (visualização) -->
     <div class="page" id="pageDash">
       <div style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;" id="dashActions">
-        <button class="btn" onclick="navTo(&#39;historico&#39;)">← Voltar</button>
+        <button class="btn" onclick="navTo('historico')">← Voltar</button>
         <button class="btn" onclick="exportExcel()">📊 Excel</button>
         <button class="btn" onclick="exportPNG()">🖼 PNG</button>
         <button class="btn primary" onclick="exportPDF()">📄 PDF</button>
@@ -559,8 +571,9 @@ function dragOver(e){e.preventDefault();document.getElementById('uploadZone').cl
 function dragLeave(e){document.getElementById('uploadZone').classList.remove('drag');}
 function dropFile(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag');processFile(e.dataTransfer.files[0]);}
 
-function processFile(file){
+async function processFile(file){
   if(!file) return;
+  await window._libsReady;
   const reader=new FileReader();
   reader.onload=ev=>{
     try {
@@ -789,6 +802,7 @@ async function renderTodasIntercorrencias(){
 
 // ── EXPORTS ──
 async function exportPNG(){
+  await window._libsReady;
   const el=document.getElementById('dashExport');
   if(!el) return;
   const canvas=await html2canvas(el,{backgroundColor:'#0a1428',scale:2,useCORS:true});
@@ -797,6 +811,7 @@ async function exportPNG(){
   a.href=canvas.toDataURL('image/png');a.click();
 }
 async function exportPDF(){
+  await window._libsReady;
   const{jsPDF}=window.jspdf;
   const el=document.getElementById('dashExport');
   if(!el) return;
@@ -805,7 +820,8 @@ async function exportPDF(){
   pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,canvas.width/2,canvas.height/2);
   pdf.save(`CSA_Dashboard_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.pdf`);
 }
-function exportExcel(){
+async function exportExcel(){
+  await window._libsReady;
   if(!tasks.length) return;
   const ws_data=[
     ['Nome do Tarefa','Nome do Projeto','Data de início','Data de vencimento','Responsáveis','Suporte','URL'],
@@ -832,6 +848,5 @@ function showToast(msg,type){
 
 init();
 </script>
-
-
-</body></html>
+</body>
+</html>
