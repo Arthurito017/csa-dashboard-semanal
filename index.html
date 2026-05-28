@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<!-- saved from url=(0073)file:///C:/Users/Arthur%20Rodrigues/Downloads/csa_dashboard_system_4.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSA Dashboard · Cebraspe</title>
+<script src="./index_files/xlsx.full.min.js.baixados"></script>
+<script src="./index_files/chart.umd.min.js.baixados"></script>
+<script src="./index_files/jspdf.umd.min.js.baixados"></script>
+<script src="./index_files/html2canvas.min.js.baixados"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{
+  --navy:#0d1b3e;--navy2:#1a2d5a;--navy3:#0a1428;
+  --accent:#3b7ff5;--accent2:#2d6be0;
+  --gold:#f0b429;--red:#e53e3e;--green:#38a169;--purple:#7c3aed;
+  --white:#f8faff;--gray:#8899bb;--gray2:#5a6a8a;
+  --border:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.04);
+  --card2:rgba(255,255,255,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:'Sora',sans-serif;background:var(--navy3);color:var(--white);min-height:100vh;}
+
+/* ── LOADING ── */
+#loading{position:fixed;inset:0;background:var(--navy3);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px;}
+.spinner{width:36px;height:36px;border:3px solid rgba(59,127,245,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-size:13px;color:var(--gray);font-family:'JetBrains Mono',monospace;}
+
+/* ── SIDEBAR ── */
+#app{display:flex;min-height:100vh;}
+#sidebar{width:220px;flex-shrink:0;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+.sidebar-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border);}
+.sidebar-logo-badge{width:36px;height:36px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:8px;}
+.sidebar-logo-title{font-size:14px;font-weight:700;letter-spacing:-.3px;}
+.sidebar-logo-sub{font-size:10px;color:var(--gray);margin-top:2px;font-family:'JetBrains Mono',monospace;}
+.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto;}
+.nav-section{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--gray2);padding:8px 8px 4px;font-weight:600;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .15s;color:rgba(248,250,255,.65);margin-bottom:2px;}
+.nav-item:hover{background:rgba(255,255,255,.06);color:var(--white);}
+.nav-item.active{background:rgba(59,127,245,.15);color:var(--accent);font-weight:500;}
+.nav-item .nav-icon{font-size:15px;flex-shrink:0;}
+.sidebar-bottom{padding:12px;border-top:1px solid var(--border);}
+.semanas-count{font-size:11px;color:var(--gray);text-align:center;font-family:'JetBrains Mono',monospace;}
+
+/* ── MAIN ── */
+#main{margin-left:220px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.topbar{height:56px;background:var(--navy2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;flex-shrink:0;}
+.topbar-title{font-size:15px;font-weight:600;}
+.topbar-actions{display:flex;gap:8px;align-items:center;}
+
+/* ── BOTÕES ── */
+.btn{padding:7px 16px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--white);font-family:'Sora',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{background:rgba(255,255,255,.12);border-color:var(--accent);}
+.btn.primary{background:var(--accent);border-color:var(--accent);}
+.btn.primary:hover{background:var(--accent2);}
+.btn.gold{background:rgba(240,180,41,.1);border-color:rgba(240,180,41,.3);color:var(--gold);}
+.btn.gold:hover{background:rgba(240,180,41,.2);}
+.btn.danger{background:rgba(229,62,62,.1);border-color:rgba(229,62,62,.3);color:#fc8181;}
+.btn.danger:hover{background:rgba(229,62,62,.2);}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── PÁGINAS ── */
+.page{display:none;flex:1;padding:1.5rem;animation:fadeIn .25s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── PAGE: HISTÓRICO ── */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:12px;}
+.page-title{font-size:18px;font-weight:700;letter-spacing:-.3px;}
+.page-sub{font-size:12px;color:var(--gray);margin-top:3px;}
+
+.semanas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.semana-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.semana-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);transition:all .2s;}
+.semana-card:hover{border-color:rgba(59,127,245,.4);background:var(--card2);transform:translateY(-1px);}
+.semana-card:hover::before{background:var(--gold);}
+.semana-periodo{font-size:13px;font-weight:600;margin-bottom:8px;}
+.semana-stats{display:flex;gap:16px;margin-top:10px;}
+.semana-stat{font-size:11px;color:var(--gray);}
+.semana-stat strong{color:var(--white);font-size:18px;font-weight:700;display:block;line-height:1;margin-bottom:2px;}
+.semana-stat.red strong{color:var(--red);}
+.semana-badge{position:absolute;top:12px;right:12px;font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(59,127,245,.15);color:var(--accent);border:1px solid rgba(59,127,245,.2);}
+.empty-state{text-align:center;padding:4rem 2rem;color:var(--gray);}
+.empty-icon{font-size:48px;margin-bottom:1rem;}
+.empty-title{font-size:16px;font-weight:500;color:var(--white);margin-bottom:6px;}
+.empty-sub{font-size:13px;line-height:1.6;}
+
+/* ── PAGE: NOVA SEMANA ── */
+.upload-zone{background:var(--card);border:1.5px dashed rgba(59,127,245,.3);border-radius:16px;padding:3rem;text-align:center;cursor:pointer;transition:all .3s;margin-bottom:1.5rem;}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(59,127,245,.06);}
+.upload-zone.has-file{border-color:var(--green);background:rgba(56,161,105,.06);}
+.upload-icon{font-size:40px;margin-bottom:1rem;}
+.upload-zone h3{font-size:16px;font-weight:600;margin-bottom:6px;}
+.upload-zone p{font-size:13px;color:var(--gray);}
+.upload-file-name{margin-top:12px;font-size:12px;color:var(--green);font-family:'JetBrains Mono',monospace;}
+
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;}
+.form-card-title{font-size:13px;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group.full{grid-column:1/-1;}
+.form-group label{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;font-weight:500;}
+.form-group input,.form-group select,.form-group textarea{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--white);font-family:'Sora',sans-serif;font-size:13px;outline:none;transition:border .2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
+.form-group select option{background:var(--navy2);}
+.form-group textarea{resize:vertical;min-height:70px;}
+.filter-box{grid-column:1/-1;background:rgba(59,127,245,.06);border:1px solid rgba(59,127,245,.15);border-radius:10px;padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.filter-box-label{grid-column:1/-1;font-size:10px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;gap:5px;}
+.tasks-found{grid-column:1/-1;font-size:11px;color:var(--gray);font-family:'JetBrains Mono',monospace;}
+
+.interc-list{display:flex;flex-direction:column;gap:8px;margin-top:1rem;}
+.interc-item{background:rgba(229,62,62,.06);border:1px solid rgba(229,62,62,.15);border-radius:8px;padding:10px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.interc-item-info{flex:1;}
+.interc-item-title{font-size:12px;font-weight:600;color:#fc8181;margin-bottom:3px;}
+.interc-item-sub{font-size:11px;color:var(--gray);}
+.btn-remove{background:none;border:none;color:var(--gray2);cursor:pointer;font-size:14px;padding:2px 4px;transition:color .15s;}
+.btn-remove:hover{color:#fc8181;}
+
+.preview-bar{background:rgba(56,161,105,.08);border:1px solid rgba(56,161,105,.2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px;}
+.preview-stats{display:flex;gap:20px;}
+.preview-stat{font-size:12px;color:var(--gray);}
+.preview-stat strong{color:var(--white);font-weight:600;}
+
+/* ── PAGE: DASHBOARD ── */
+#dashContent{} 
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px;}
+.dash-title-main{font-size:17px;font-weight:700;letter-spacing:-.3px;}
+.dash-period-badge{font-size:11px;color:var(--gray);font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,.05);padding:3px 10px;border-radius:99px;border:1px solid var(--border);}
+.cards-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem;}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;position:relative;overflow:hidden;}
+.metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);}
+.metric-card.gold::before{background:var(--gold);}
+.metric-card.red::before{background:var(--red);}
+.metric-label{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.metric-value{font-size:32px;font-weight:700;line-height:1;letter-spacing:-1px;}
+.metric-value.gold{color:var(--gold);}
+.metric-value.red{color:var(--red);}
+.metric-sub{font-size:10px;color:var(--gray);margin-top:5px;}
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem;}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;}
+.chart-title{font-size:12px;font-weight:600;margin-bottom:.9rem;}
+.chart-wrap{position:relative;height:185px;}
+.bottom-row{display:grid;grid-template-columns:185px 1fr;gap:10px;margin-bottom:1.25rem;}
+.ic-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.ic-num{font-size:52px;font-weight:700;color:var(--gold);line-height:1;}
+.ic-lbl{font-size:10px;color:var(--gray);margin-top:5px;text-transform:uppercase;letter-spacing:.06em;}
+.ic-bdg{margin-top:10px;font-size:10px;padding:2px 8px;border-radius:99px;background:rgba(240,180,41,.12);color:var(--gold);border:1px solid rgba(240,180,41,.25);}
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.25rem;overflow:hidden;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;padding:7px 9px;color:var(--gray);font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:7px 9px;border-bottom:1px solid rgba(255,255,255,.03);color:rgba(248,250,255,.85);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.02);}
+.empty-table{text-align:center;padding:1.5rem;color:var(--gray);font-size:12px;}
+.tag{display:inline-block;font-size:9px;padding:2px 7px;border-radius:99px;font-weight:500;}
+.tag-red{background:rgba(229,62,62,.12);color:#fc8181;border:1px solid rgba(229,62,62,.25);}
+a.lnk{color:var(--accent);text-decoration:none;font-size:11px;}
+a.lnk:hover{text-decoration:underline;}
+
+/* ── PAGE: COMPARATIVO ── */
+.comp-filters{display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.comp-select{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--white);font-family:'Sora',sans-serif;font-size:12px;outline:none;}
+.comp-select:focus{border-color:var(--accent);}
+.comp-select option{background:var(--navy2);}
+.bar-chart{display:flex;flex-direction:column;gap:7px;}
+.bar-row-m{display:flex;align-items:center;gap:9px;}
+.bar-label-m{width:100px;flex-shrink:0;font-size:10px;color:rgba(248,250,255,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bar-track-m{flex:1;background:rgba(255,255,255,.05);border-radius:4px;height:14px;overflow:hidden;}
+.bar-fill-m{height:100%;border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.bar-count-m{font-size:10px;color:var(--gray);width:20px;text-align:right;flex-shrink:0;font-family:'JetBrains Mono',monospace;}
+.btn-excluir-card{position:absolute;bottom:12px;right:12px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.15);border-radius:6px;color:#fc8181;font-size:12px;padding:3px 7px;cursor:pointer;opacity:0;transition:all .2s;z-index:2;}
+.semana-card:hover .btn-excluir-card{opacity:1;}
+.btn-excluir-card:hover{background:rgba(229,62,62,.2);border-color:rgba(229,62,62,.4);}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;background:var(--navy2);border:1px solid var(--border);border-radius:10px;font-size:13px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:rgba(56,161,105,.4);color:#68d391;}
+#toast.error{border-color:rgba(229,62,62,.4);color:#fc8181;}
+</style>
+</head>
+<body>
+
+<div id="loading" style="display: none;">
+  <div style="font-size:28px;margin-bottom:8px;">📊</div>
+  <div class="spinner"></div>
+  <div class="loading-text">Carregando CSA Dashboard...</div>
+</div>
+
+<div id="app" style="display: flex;">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-badge">📊</div>
+      <div class="sidebar-logo-title">CSA Dashboard</div>
+      <div class="sidebar-logo-sub">Cebraspe · Sustentação</div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section">Menu</div>
+      <div class="nav-item active" onclick="navTo(&#39;historico&#39;)"><span class="nav-icon">🗂</span> Histórico</div>
+      <div class="nav-item" onclick="navTo(&#39;nova&#39;)"><span class="nav-icon">➕</span> Nova Semana</div>
+      <div class="nav-section" style="margin-top:8px;">Análise</div>
+      <div class="nav-item" onclick="navTo(&#39;comparativo&#39;)"><span class="nav-icon">📈</span> Comparativo</div>
+      <div class="nav-item" onclick="navTo(&#39;intercorrencias&#39;)"><span class="nav-icon">⚠️</span> Intercorrências</div>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="semanas-count" id="sidebarCount">1 semana salva</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbarTitle">Histórico de Semanas</div>
+      <div class="topbar-actions" id="topbarActions"></div>
+    </div>
+
+    <!-- PÁGINA: HISTÓRICO -->
+    <div class="page active" id="pageHistorico">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Semanas Registradas</div>
+          <div class="page-sub">Clique em uma semana para ver o dashboard completo</div>
+        </div>
+        <button class="btn primary" onclick="navTo(&#39;nova&#39;)">➕ Nova semana</button>
+      </div>
+      <div id="semanasGrid" class="semanas-grid"><div class="semana-card" onclick="verSemana(&#39;5b443a18-af58-4c24-8a86-c91527b7eb32&#39;)">
+      <div class="semana-badge">2026</div>
+      <button class="btn-excluir-card" title="Excluir semana" onclick="event.stopPropagation();confirmarExcluirSemana(&#39;5b443a18-af58-4c24-8a86-c91527b7eb32&#39;)">🗑</button>
+      <div class="semana-periodo">📅 18/05/2026 → 22/05/2026</div>
+      <div class="semana-stats">
+        <div class="semana-stat"><strong>95</strong>atividades</div>
+        <div class="semana-stat red"><strong>1</strong>intercorrências</div>
+      </div>
+    </div></div>
+    </div>
+
+    <!-- PÁGINA: NOVA SEMANA -->
+    <div class="page" id="pageNova">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Nova Semana</div>
+          <div class="page-sub">Importe a planilha e registre as intercorrências</div>
+        </div>
+      </div>
+
+      <!-- UPLOAD -->
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById(&#39;fileInput&#39;).click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+        <div class="upload-icon" id="uploadIcon">📁</div>
+        <h3 id="uploadTitle">Importar planilha do Zoho</h3>
+        <p id="uploadSub">Arraste ou clique para selecionar o Excel exportado</p>
+        <div class="upload-file-name" id="uploadFileName"></div>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(event)">
+
+      <!-- PREVIEW -->
+      <div class="preview-bar" id="previewBar" style="display:none;">
+        <div class="preview-stats">
+          <div class="preview-stat"><strong id="pvTotal">0</strong> atividades</div>
+          <div class="preview-stat"><strong id="pvProjetos">0</strong> eventos</div>
+          <div class="preview-stat"><strong id="pvPeriod" style="font-size:13px;">—</strong> período</div>
+        </div>
+        <div style="font-size:11px;color:var(--green);">✓ Planilha carregada com sucesso</div>
+      </div>
+
+      <!-- FORM INTERCORRÊNCIAS -->
+      <div class="form-card" id="formInterc" style="display:none;">
+        <div class="form-card-title">⚠️ Registrar Intercorrência <span style="font-size:11px;color:var(--gray);font-weight:400;">(opcional)</span></div>
+        <div class="form-grid">
+          <div class="filter-box">
+            <div class="filter-box-label">🔍 Filtrar atividade por evento</div>
+            <div class="form-group" style="margin:0;">
+              <label>Evento</label>
+              <select id="fEvento" onchange="filtrarTarefas()"><option value="">— Todos —</option></select>
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label>Atividade</label>
+              <select id="fTarefa"><option value="">— Selecione —</option></select>
+            </div>
+            <div class="tasks-found" id="tasksFound"></div>
+          </div>
+          <div class="form-group">
+            <label>Título da intercorrência</label>
+            <input type="text" id="fTitulo" placeholder="Descreva brevemente...">
+          </div>
+          <div class="form-group">
+            <label>Link do chamado</label>
+            <input type="url" id="fLink" placeholder="https://...">
+          </div>
+          <div class="form-group full">
+            <label>Descrição / solução</label>
+            <textarea id="fDesc" placeholder="Detalhe o problema e como foi resolvido..."></textarea>
+          </div>
+        </div>
+        <button class="btn" style="margin-top:1rem;" onclick="addIntercorrencia()">+ Adicionar</button>
+        <div class="interc-list" id="intercList"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;" id="saveActions">
+        <button class="btn primary" id="btnSalvar" onclick="salvarSemana()" disabled="">💾 Salvar semana no banco</button>
+        <button class="btn" onclick="resetNova()">✕ Cancelar</button>
+      </div>
+    </div>
+
+    <!-- PÁGINA: DASHBOARD (visualização) -->
+    <div class="page" id="pageDash">
+      <div style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;" id="dashActions">
+        <button class="btn" onclick="navTo(&#39;historico&#39;)">← Voltar</button>
+        <button class="btn" onclick="exportExcel()">📊 Excel</button>
+        <button class="btn" onclick="exportPNG()">🖼 PNG</button>
+        <button class="btn primary" onclick="exportPDF()">📄 PDF</button>
+        <button class="btn danger" onclick="deletarSemana()">🗑 Excluir</button>
+      </div>
+      <div id="dashContent"></div>
+    </div>
+
+    <!-- PÁGINA: COMPARATIVO -->
+    <div class="page" id="pageComparativo">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Comparativo entre Semanas</div>
+          <div class="page-sub">Evolução de atividades e intercorrências ao longo do tempo</div>
+        </div>
+      </div>
+      <div id="compContent"></div>
+    </div>
+
+    <!-- PÁGINA: INTERCORRÊNCIAS -->
+    <div class="page" id="pageIntercorrencias">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Todas as Intercorrências</div>
+          <div class="page-sub">Histórico consolidado de todas as semanas</div>
+        </div>
+      </div>
+      <div class="comp-filters">
+        <select class="comp-select" id="filtroSemanaInterc" onchange="renderTodasIntercorrencias()">
+          <option value="">Todas as semanas</option>
+        </select>
+        <select class="comp-select" id="filtroProjetoInterc" onchange="renderTodasIntercorrencias()">
+          <option value="">Todos os projetos</option>
+        </select>
+      </div>
+      <div class="table-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Semana</th><th>Tarefa</th><th>Projeto</th><th>Intercorrência</th><th>Descrição</th><th>Chamado</th></tr></thead>
+            <tbody id="tbodyTodasInterc"><tr><td colspan="6" class="empty-table">Nenhuma intercorrência registrada</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<div id="toast"></div>
+
+<script>
+const SUPA_URL = 'https://whidfmtcbcxizjzyvnif.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndoaWRmbXRjYmN4aXpqenl2bmlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NzczNzcsImV4cCI6MjA5NTU1MzM3N30.JHe2vDPG2M-F3kBWHYvGI6MInUSB28oKw2kQI_bGgU4';
+
+const H = {'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
+
+async function sb(path, opts={}) {
+  const r = await fetch(SUPA_URL+'/rest/v1/'+path, {headers:{...H,'Prefer':'return=representation'}, ...opts});
+  if (!r.ok) { const e = await r.text(); throw new Error(e); }
+  const t = await r.text();
+  return t ? JSON.parse(t) : [];
+}
+
+// STATE
+let semanas = [];
+let tasks = [], intercorrencias = [], charts = {};
+let currentSemanaId = null;
+
+// INIT
+async function init() {
+  try {
+    await loadSemanas();
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+  } catch(e) {
+    document.getElementById('loading').innerHTML = '<div style="color:#fc8181;font-size:14px;">Erro ao conectar ao banco.<br><small>'+e.message+'</small></div>';
+  }
+}
+
+async function loadSemanas() {
+  semanas = await sb('semanas?select=*,atividades(count),intercorrencias(count)&order=periodo_inicio.desc');
+  renderHistorico();
+  updateSidebarCount();
+}
+
+function updateSidebarCount() {
+  document.getElementById('sidebarCount').textContent = semanas.length + ' semana' + (semanas.length!==1?'s':'') + ' salva' + (semanas.length!==1?'s':'');
+}
+
+// NAV
+function navTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page'+page.charAt(0).toUpperCase()+page.slice(1)).classList.add('active');
+  const navMap = {historico:0,nova:1,comparativo:2,intercorrencias:3};
+  document.querySelectorAll('.nav-item')[navMap[page]]?.classList.add('active');
+  const titles = {historico:'Histórico de Semanas',nova:'Nova Semana',comparativo:'Comparativo entre Semanas',intercorrencias:'Todas as Intercorrências',Dash:'Dashboard da Semana'};
+  document.getElementById('topbarTitle').textContent = titles[page] || '';
+  if (page === 'comparativo') renderComparativo();
+  if (page === 'intercorrencias') renderTodasIntercorrencias();
+}
+
+// ── HISTÓRICO ──
+function renderHistorico() {
+  const grid = document.getElementById('semanasGrid');
+  if (!semanas.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">Nenhuma semana ainda</div><div class="empty-sub">Importe a primeira planilha<br>para começar o histórico.</div></div>`;
+    return;
+  }
+  grid.innerHTML = semanas.map(s => {
+    const atv = s.atividades?.[0]?.count ?? '?';
+    const interc = s.intercorrencias?.[0]?.count ?? 0;
+    const d1 = fmt(s.periodo_inicio), d2 = fmt(s.periodo_fim);
+    return `<div class="semana-card" onclick="verSemana('${s.id}')">
+      <div class="semana-badge">${d1.split('/')[2]}</div>
+      <button class="btn-excluir-card" title="Excluir semana" onclick="event.stopPropagation();confirmarExcluirSemana('${s.id}')">🗑</button>
+      <div class="semana-periodo">📅 ${d1} → ${d2}</div>
+      <div class="semana-stats">
+        <div class="semana-stat"><strong>${atv}</strong>atividades</div>
+        <div class="semana-stat ${interc>0?'red':''}"><strong>${interc}</strong>intercorrências</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function confirmarExcluirSemana(id) {
+  const s = semanas.find(x=>x.id===id);
+  if (!s) return;
+  const d1 = fmt(s.periodo_inicio), d2 = fmt(s.periodo_fim);
+  if (!confirm(`Excluir a semana ${d1} a ${d2}?\n\nTodos os dados (atividades e intercorrencias) serao removidos permanentemente.`)) return;
+  try {
+    await sb(`semanas?id=eq.${id}`, {method:'DELETE'});
+    showToast('Semana excluida com sucesso','success');
+    await loadSemanas();
+  } catch(e) { showToast('Erro ao excluir: '+e.message,'error'); }
+}
+
+function fmt(d) {
+  if (!d) return '?';
+  const dt = new Date(d+'T12:00:00');
+  return dt.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+}
+
+// ── VER SEMANA ──
+async function verSemana(id) {
+  currentSemanaId = id;
+  showToast('Carregando semana...','');
+  try {
+    const [atv, interc] = await Promise.all([
+      sb(`atividades?semana_id=eq.${id}&order=nome_projeto.asc`),
+      sb(`intercorrencias?semana_id=eq.${id}`)
+    ]);
+    const semana = semanas.find(s=>s.id===id);
+    tasks = atv;
+    intercorrencias = interc;
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('pageDash').classList.add('active');
+    document.getElementById('topbarTitle').textContent = 'Dashboard · '+fmt(semana.periodo_inicio)+' → '+fmt(semana.periodo_fim);
+    renderDashboard(semana);
+    showToast('Semana carregada!','success');
+  } catch(e) { showToast('Erro: '+e.message,'error'); }
+}
+
+function renderDashboard(semana) {
+  const period = fmt(semana.periodo_inicio)+' → '+fmt(semana.periodo_fim);
+  const projCount = {};
+  tasks.forEach(t=>{if(t.nome_projeto)projCount[t.nome_projeto]=(projCount[t.nome_projeto]||0)+1;});
+  const projEntries = Object.entries(projCount).sort((a,b)=>b[1]-a[1]);
+  const maxP = projEntries[0]?.[1]||1;
+
+  document.getElementById('dashContent').innerHTML = `
+    <div id="dashExport">
+      <div class="dash-header">
+        <div class="dash-title-main">Atividades Entregues — Semana</div>
+        <div class="dash-period-badge">${period}</div>
+      </div>
+      <div class="cards-row">
+        <div class="metric-card"><div class="metric-label">Atividades Entregues</div><div class="metric-value">${tasks.length}</div><div class="metric-sub">tarefas na semana</div></div>
+        <div class="metric-card gold"><div class="metric-label">Projetos Trabalhados</div><div class="metric-value gold">${new Set(tasks.map(t=>t.nome_projeto)).size}</div><div class="metric-sub">eventos distintos</div></div>
+        <div class="metric-card red"><div class="metric-label">Intercorrências</div><div class="metric-value red">${intercorrencias.length}</div><div class="metric-sub">registradas na semana</div></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card"><div class="chart-title">Atividades por Dia da Semana</div><div class="chart-wrap"><canvas id="cDia"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Distribuição por Suporte</div><div class="chart-wrap"><canvas id="cSup"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Distribuição por Responsável Técnico</div><div class="chart-wrap"><canvas id="cResp"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Top Projetos por Volume</div>
+          <div class="bar-chart" style="height:185px;overflow-y:auto;">
+            ${projEntries.slice(0,12).map(([n,c])=>`<div class="bar-row-m"><span class="bar-label-m" title="${n}">${n}</span><div class="bar-track-m"><div class="bar-fill-m" style="width:${(c/maxP*100).toFixed(1)}%;background:var(--accent);"></div></div><span class="bar-count-m">${c}</span></div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="bottom-row">
+        <div class="ic-card">
+          <div class="ic-num">${intercorrencias.length}</div>
+          <div class="ic-lbl">Intercorrências</div>
+          <div class="ic-bdg">${intercorrencias.length===0?'Nenhuma na semana':intercorrencias.length+' registrada'+(intercorrencias.length>1?'s':'')}</div>
+        </div>
+        <div class="table-card">
+          <div class="chart-title">Tabela de Intercorrências</div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Tarefa</th><th>Projeto</th><th>Intercorrência</th><th>Descrição</th><th>Chamado</th></tr></thead>
+            <tbody>${intercorrencias.length?intercorrencias.map(ic=>`<tr>
+              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${ic.nome_tarefa}">${ic.nome_tarefa}</td>
+              <td style="font-size:10px;color:var(--gray);white-space:nowrap;">${ic.nome_projeto}</td>
+              <td><span class="tag tag-red">${ic.titulo}</span></td>
+              <td style="max-width:180px;font-size:11px;color:var(--gray);">${ic.descricao||'—'}</td>
+              <td>${ic.link_chamado?`<a href="${ic.link_chamado}" class="lnk" target="_blank">🔗</a>`:'—'}</td>
+            </tr>`).join(''):'<tr><td colspan="5" class="empty-table">Sem intercorrências</td></tr>'}</tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>`;
+
+  // Charts
+  const dn=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+  const dc={};
+  tasks.forEach(t=>{if(t.data_inicio){const d=new Date(t.data_inicio+'T12:00:00').getDay();dc[d]=(dc[d]||0)+1;}});
+  mkChart('cDia','bar',[1,2,3,4,5].map(d=>dn[d]),[1,2,3,4,5].map(d=>dc[d]||0),'#3b7ff5');
+
+  const sc={};
+  tasks.forEach(t=>{const s=(t.suporte||'').trim()||'Sem suporte';sc[s]=(sc[s]||0)+1;});
+  const se=Object.entries(sc).sort((a,b)=>b[1]-a[1]);
+  mkChart('cSup','doughnut',se.map(e=>e[0]),se.map(e=>e[1]),['#3b7ff5','#1D9E75','#f0b429','#e53e3e','#a78bfa']);
+
+  const rc={};
+  tasks.forEach(t=>{(t.responsaveis||'').split(',').forEach(r=>{const tr=r.trim();if(tr)rc[tr]=(rc[tr]||0)+1;});});
+  const re=Object.entries(rc).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  mkChart('cResp','doughnut',re.map(e=>e[0]),re.map(e=>e[1]),['#3b7ff5','#f0b429','#1D9E75','#e53e3e','#a78bfa','#f97316']);
+}
+
+function mkChart(id,type,labels,data,colors){
+  if(charts[id])charts[id].destroy();
+  const ca=Array.isArray(colors)?colors:Array(labels.length).fill(colors);
+  charts[id]=new Chart(document.getElementById(id).getContext('2d'),{
+    type,
+    data:{labels,datasets:[{data,backgroundColor:type==='bar'?ca.map(c=>c+'99'):ca,borderColor:type==='bar'?ca:ca.map(c=>c+'cc'),borderWidth:2,borderRadius:type==='bar'?5:0}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:type!=='bar',position:'right',labels:{color:'#8899bb',font:{family:'Sora',size:10},boxWidth:10,padding:8}},
+        tooltip:{backgroundColor:'#1a2d5a',titleColor:'#f8faff',bodyColor:'#8899bb',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,padding:8,titleFont:{family:'Sora',weight:'600'},bodyFont:{family:'Sora'}}},
+      scales:type==='bar'?{x:{ticks:{color:'#8899bb',font:{family:'Sora',size:10}},grid:{color:'rgba(255,255,255,0.03)'}},y:{ticks:{color:'#8899bb',font:{family:'Sora',size:10}},grid:{color:'rgba(255,255,255,0.05)'},beginAtZero:true}}:{}}
+  });
+}
+
+// ── NOVA SEMANA ──
+let newTasks=[], newIntercs=[];
+
+function handleFile(e){ processFile(e.target.files[0]); }
+function dragOver(e){e.preventDefault();document.getElementById('uploadZone').classList.add('drag');}
+function dragLeave(e){document.getElementById('uploadZone').classList.remove('drag');}
+function dropFile(e){e.preventDefault();document.getElementById('uploadZone').classList.remove('drag');processFile(e.dataTransfer.files[0]);}
+
+function processFile(file){
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try {
+      const wb=XLSX.read(ev.target.result,{type:'binary',cellDates:true});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const data=XLSX.utils.sheet_to_json(ws,{defval:''});
+      if(!data.length) return showToast('Planilha vazia','error');
+      newTasks=data.map(r=>({
+        nome_tarefa:r['Nome do Tarefa']||r['Task Name']||'',
+        nome_projeto:r['Nome do Projeto']||r['Project Name']||'',
+        data_inicio:parseD(r['Data de início']||r['Start Date']),
+        data_vencimento:parseD(r['Data de vencimento']||r['Due Date']),
+        responsaveis:r['Responsáveis Técnicos']||r['Assignees']||'',
+        suporte:r['Suporte']||'',
+        tarefa_url:r['Tarefa URL']||r['Task URL']||''
+      }));
+      newIntercs=[];
+      // UI feedback
+      document.getElementById('uploadZone').classList.add('has-file');
+      document.getElementById('uploadIcon').textContent='✅';
+      document.getElementById('uploadTitle').textContent='Planilha carregada!';
+      document.getElementById('uploadSub').textContent='';
+      document.getElementById('uploadFileName').textContent=file.name;
+      // Preview
+      const dates=newTasks.map(t=>t.data_inicio).filter(Boolean).sort();
+      document.getElementById('pvTotal').textContent=newTasks.length;
+      document.getElementById('pvProjetos').textContent=new Set(newTasks.map(t=>t.nome_projeto)).size;
+      document.getElementById('pvPeriod').textContent=dates.length?(dates[0].slice(0,10).split('-').reverse().join('/')+' → '+dates[dates.length-1].slice(0,10).split('-').reverse().join('/')):'—';
+      document.getElementById('previewBar').style.display='flex';
+      document.getElementById('formInterc').style.display='block';
+      document.getElementById('saveActions').style.display='flex';
+      document.getElementById('btnSalvar').disabled=false;
+      // Popula eventos
+      const evs=[...new Set(newTasks.map(t=>t.nome_projeto).filter(Boolean))].sort();
+      const sel=document.getElementById('fEvento');
+      sel.innerHTML='<option value="">— Todos —</option>';
+      evs.forEach(ev=>{const op=document.createElement('option');op.value=ev;op.textContent=ev;sel.appendChild(op);});
+      popularTarefas('');
+      showToast('Planilha importada com sucesso!','success');
+    } catch(e){ showToast('Erro ao ler o arquivo: '+e.message,'error'); }
+  };
+  reader.readAsBinaryString(file);
+}
+
+function parseD(v){
+  if(!v) return null;
+  if(v instanceof Date) return v.toISOString().slice(0,10);
+  if(typeof v==='string'){const p=v.match(/(\d{2})\/(\d{2})\/(\d{4})/);if(p)return `${p[3]}-${p[2]}-${p[1]}`;}
+  return null;
+}
+
+function popularTarefas(ev){
+  const sel=document.getElementById('fTarefa');
+  const f=ev?newTasks.filter(t=>t.nome_projeto===ev):newTasks;
+  sel.innerHTML='<option value="">— Selecione —</option>';
+  f.forEach((t,_)=>{const idx=newTasks.indexOf(t);const op=document.createElement('option');op.value=idx;op.textContent=t.nome_tarefa.length>90?t.nome_tarefa.slice(0,90)+'...':t.nome_tarefa;sel.appendChild(op);});
+  document.getElementById('tasksFound').textContent=ev?`${f.length} atividade${f.length!==1?'s':''} encontrada${f.length!==1?'s':''}` :'';
+}
+
+function filtrarTarefas(){popularTarefas(document.getElementById('fEvento').value);}
+
+function addIntercorrencia(){
+  const idx=document.getElementById('fTarefa').value;
+  const titulo=document.getElementById('fTitulo').value.trim();
+  const link=document.getElementById('fLink').value.trim();
+  const desc=document.getElementById('fDesc').value.trim();
+  if(!idx) return showToast('Selecione uma atividade','error');
+  if(!titulo) return showToast('Preencha o título','error');
+  const t=newTasks[idx];
+  newIntercs.push({tarefaIdx:+idx,nome_tarefa:t.nome_tarefa,nome_projeto:t.nome_projeto,titulo,descricao:desc,link_chamado:link});
+  document.getElementById('fTarefa').value='';
+  document.getElementById('fTitulo').value='';
+  document.getElementById('fLink').value='';
+  document.getElementById('fDesc').value='';
+  renderIntercList();
+  showToast('Intercorrência adicionada!','success');
+}
+
+function renderIntercList(){
+  const el=document.getElementById('intercList');
+  if(!newIntercs.length){el.innerHTML='';return;}
+  el.innerHTML=newIntercs.map((ic,i)=>`
+    <div class="interc-item">
+      <div class="interc-item-info">
+        <div class="interc-item-title">⚠️ ${ic.titulo}</div>
+        <div class="interc-item-sub">${ic.nome_projeto} · ${ic.nome_tarefa.slice(0,60)}${ic.nome_tarefa.length>60?'...':''}</div>
+      </div>
+      <button class="btn-remove" onclick="removeInterc(${i})">✕</button>
+    </div>`).join('');
+}
+
+function removeInterc(i){newIntercs.splice(i,1);renderIntercList();}
+
+async function salvarSemana(){
+  if(!newTasks.length) return showToast('Importe uma planilha primeiro','error');
+  document.getElementById('btnSalvar').disabled=true;
+  document.getElementById('btnSalvar').textContent='Salvando...';
+  try {
+    const dates=newTasks.map(t=>t.data_inicio).filter(Boolean).sort();
+    const semana=await sb('semanas',{method:'POST',body:JSON.stringify({periodo_inicio:dates[0]||new Date().toISOString().slice(0,10),periodo_fim:dates[dates.length-1]||new Date().toISOString().slice(0,10)})});
+    const sid=semana[0].id;
+    // Salvar atividades em lotes
+    const BATCH=50;
+    for(let i=0;i<newTasks.length;i+=BATCH){
+      const batch=newTasks.slice(i,i+BATCH).map(t=>({...t,semana_id:sid}));
+      await sb('atividades',{method:'POST',body:JSON.stringify(batch)});
+    }
+    // Salvar intercorrências
+    if(newIntercs.length){
+      const atvs=await sb(`atividades?semana_id=eq.${sid}`);
+      const intercsToSave=newIntercs.map(ic=>{
+        const atv=atvs.find(a=>a.nome_tarefa===ic.nome_tarefa&&a.nome_projeto===ic.nome_projeto);
+        return{semana_id:sid,atividade_id:atv?.id||null,nome_tarefa:ic.nome_tarefa,nome_projeto:ic.nome_projeto,titulo:ic.titulo,descricao:ic.descricao,link_chamado:ic.link_chamado};
+      });
+      await sb('intercorrencias',{method:'POST',body:JSON.stringify(intercsToSave)});
+    }
+    showToast('Semana salva com sucesso!','success');
+    await loadSemanas();
+    resetNova();
+    navTo('historico');
+  } catch(e){
+    showToast('Erro ao salvar: '+e.message,'error');
+    document.getElementById('btnSalvar').disabled=false;
+    document.getElementById('btnSalvar').textContent='💾 Salvar semana no banco';
+  }
+}
+
+function resetNova(){
+  newTasks=[];newIntercs=[];
+  document.getElementById('fileInput').value='';
+  document.getElementById('uploadZone').className='upload-zone';
+  document.getElementById('uploadIcon').textContent='📁';
+  document.getElementById('uploadTitle').textContent='Importar planilha do Zoho';
+  document.getElementById('uploadSub').textContent='Arraste ou clique para selecionar o Excel exportado';
+  document.getElementById('uploadFileName').textContent='';
+  document.getElementById('previewBar').style.display='none';
+  document.getElementById('formInterc').style.display='none';
+  document.getElementById('saveActions').style.display='none';
+  document.getElementById('intercList').innerHTML='';
+  document.getElementById('btnSalvar').disabled=true;
+  document.getElementById('btnSalvar').textContent='💾 Salvar semana no banco';
+}
+
+// ── DELETAR SEMANA ──
+async function deletarSemana(){
+  if(!currentSemanaId) return;
+  if(!confirm('Tem certeza que deseja excluir esta semana? Essa ação não pode ser desfeita.')) return;
+  try {
+    await sb(`semanas?id=eq.${currentSemanaId}`,{method:'DELETE'});
+    showToast('Semana excluída','success');
+    await loadSemanas();
+    navTo('historico');
+  } catch(e){ showToast('Erro: '+e.message,'error'); }
+}
+
+// ── COMPARATIVO ──
+async function renderComparativo(){
+  if(!semanas.length){
+    document.getElementById('compContent').innerHTML='<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">Sem dados ainda</div><div class="empty-sub">Importe ao menos uma semana</div></div>';
+    return;
+  }
+  // Limita às 4 semanas mais recentes (1 mês)
+  const MAX_SEMANAS = 4;
+  const semanasOrdenadas = [...semanas].reverse().slice(-MAX_SEMANAS); // cronológico, max 4
+  const totalSemanas = semanas.length;
+  const labels = semanasOrdenadas.map(s => fmt(s.periodo_inicio).slice(0,5));
+  const atvData = semanasOrdenadas.map(s => s.atividades?.[0]?.count || 0);
+  const intData = semanasOrdenadas.map(s => s.intercorrencias?.[0]?.count || 0);
+
+  // Tabela resumo
+  const resumoRows = semanasOrdenadas.map(s => `
+    <tr>
+      <td style="white-space:nowrap;">${fmt(s.periodo_inicio)} → ${fmt(s.periodo_fim)}</td>
+      <td style="text-align:center;font-weight:600;">${s.atividades?.[0]?.count||0}</td>
+      <td style="text-align:center;color:${(s.intercorrencias?.[0]?.count||0)>0?'#fc8181':'var(--gray)'}; font-weight:600;">${s.intercorrencias?.[0]?.count||0}</td>
+    </tr>`).join('');
+
+  const limitNote = totalSemanas > MAX_SEMANAS ? `<div style="font-size:11px;color:var(--gold);background:rgba(240,180,41,.08);border:1px solid rgba(240,180,41,.2);border-radius:8px;padding:8px 12px;margin-bottom:12px;">⚠️ Exibindo as últimas 4 semanas de ${totalSemanas} registradas. Para comparar outras semanas, use os filtros na aba Intercorrências.</div>` : '';
+  document.getElementById('compContent').innerHTML=limitNote+`
+    <div class="charts-row">
+      <div class="chart-card"><div class="chart-title">Atividades por Semana</div><div class="chart-wrap"><canvas id="cCompAtv"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">Intercorrências por Semana</div><div class="chart-wrap"><canvas id="cCompInterc"></canvas></div></div>
+    </div>
+    <div class="table-card" style="margin-top:0;">
+      <div class="chart-title">Resumo por Semana</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Período</th><th style="text-align:center;">Atividades</th><th style="text-align:center;">Intercorrências</th></tr></thead>
+        <tbody>${resumoRows}</tbody>
+      </table></div>
+    </div>`;
+
+  mkChart('cCompAtv','bar',labels,atvData,'#3b7ff5');
+  mkChart('cCompInterc','bar',labels,intData,'#e53e3e');
+}
+
+// ── TODAS INTERCORRÊNCIAS ──
+async function renderTodasIntercorrencias(){
+  try {
+    let query='intercorrencias?select=*,semanas(periodo_inicio,periodo_fim)&order=semanas(periodo_inicio).desc';
+    const fs=document.getElementById('filtroSemanaInterc')?.value;
+    const fp=document.getElementById('filtroProjetoInterc')?.value;
+    if(fs) query+=`&semana_id=eq.${fs}`;
+    if(fp) query+=`&nome_projeto=eq.${encodeURIComponent(fp)}`;
+    const data=await sb(query);
+    // Popula filtros
+    const selS=document.getElementById('filtroSemanaInterc');
+    const selP=document.getElementById('filtroProjetoInterc');
+    const curS=selS.value, curP=selP.value;
+    selS.innerHTML='<option value="">Todas as semanas</option>';
+    semanas.forEach(s=>{const op=document.createElement('option');op.value=s.id;op.textContent=fmt(s.periodo_inicio)+' → '+fmt(s.periodo_fim);if(s.id===curS)op.selected=true;selS.appendChild(op);});
+    const projs=[...new Set(data.map(d=>d.nome_projeto).filter(Boolean))].sort();
+    selP.innerHTML='<option value="">Todos os projetos</option>';
+    projs.forEach(p=>{const op=document.createElement('option');op.value=p;op.textContent=p;if(p===curP)op.selected=true;selP.appendChild(op);});
+    const tbody=document.getElementById('tbodyTodasInterc');
+    if(!data.length){tbody.innerHTML='<tr><td colspan="6" class="empty-table">Nenhuma intercorrência encontrada</td></tr>';return;}
+    tbody.innerHTML=data.map(ic=>`<tr>
+      <td style="white-space:nowrap;font-size:10px;color:var(--gray);">${ic.semanas?fmt(ic.semanas.periodo_inicio):'—'}</td>
+      <td style="max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${ic.nome_tarefa}">${ic.nome_tarefa}</td>
+      <td style="font-size:10px;color:var(--gray);white-space:nowrap;">${ic.nome_projeto}</td>
+      <td><span class="tag tag-red">${ic.titulo}</span></td>
+      <td style="max-width:160px;font-size:11px;color:var(--gray);">${ic.descricao||'—'}</td>
+      <td>${ic.link_chamado?`<a href="${ic.link_chamado}" class="lnk" target="_blank">🔗</a>`:'—'}</td>
+    </tr>`).join('');
+  } catch(e){ showToast('Erro: '+e.message,'error'); }
+}
+
+// ── EXPORTS ──
+async function exportPNG(){
+  const el=document.getElementById('dashExport');
+  if(!el) return;
+  const canvas=await html2canvas(el,{backgroundColor:'#0a1428',scale:2,useCORS:true});
+  const a=document.createElement('a');
+  a.download=`CSA_${currentSemanaId?.slice(0,8)||'dashboard'}.png`;
+  a.href=canvas.toDataURL('image/png');a.click();
+}
+async function exportPDF(){
+  const{jsPDF}=window.jspdf;
+  const el=document.getElementById('dashExport');
+  if(!el) return;
+  const canvas=await html2canvas(el,{backgroundColor:'#0a1428',scale:2,useCORS:true});
+  const pdf=new jsPDF({orientation:'landscape',unit:'px',format:[canvas.width/2,canvas.height/2]});
+  pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,canvas.width/2,canvas.height/2);
+  pdf.save(`CSA_Dashboard_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.pdf`);
+}
+function exportExcel(){
+  if(!tasks.length) return;
+  const ws_data=[
+    ['Nome do Tarefa','Nome do Projeto','Data de início','Data de vencimento','Responsáveis','Suporte','URL'],
+    ...tasks.map(t=>[t.nome_tarefa,t.nome_projeto,t.data_inicio,t.data_vencimento,t.responsaveis,t.suporte,t.tarefa_url])
+  ];
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ws_data),'Atividades');
+  if(intercorrencias.length){
+    const ic=[['Tarefa','Projeto','Intercorrência','Descrição','Chamado'],...intercorrencias.map(ic=>[ic.nome_tarefa,ic.nome_projeto,ic.titulo,ic.descricao,ic.link_chamado])];
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ic),'Intercorrências');
+  }
+  XLSX.writeFile(wb,`CSA_Dashboard_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.xlsx`);
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='show '+(type||'');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.className='',3000);
+}
+
+init();
+</script>
+
+
+</body></html>
