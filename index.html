@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0073)file:///C:/Users/Arthur%20Rodrigues/Downloads/csa_dashboard_system_8.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CSA Dashboard · Cebraspe</title>
 <script>
@@ -21,7 +21,7 @@ window._libsReady = (async () => {
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
 })();
-</script>
+</script><script src="./index_files/xlsx.full.min.js.baixados"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 :root{
@@ -194,16 +194,51 @@ a.lnk:hover{text-decoration:underline;}
 #toast.success{border-color:rgba(56,161,105,.4);color:#68d391;}
 #toast.error{border-color:rgba(229,62,62,.4);color:#fc8181;}
 </style>
-</head>
+<script src="./index_files/chart.umd.min.js.baixados"></script><script src="./index_files/jspdf.umd.min.js.baixados"></script><script src="./index_files/html2canvas.min.js.baixados"></script></head>
 <body>
 
-<div id="loading">
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" style="display:none;">
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:radial-gradient(ellipse at 30% 20%,rgba(30,79,194,.25) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(59,127,245,.12) 0%,transparent 50%),#0a1428;">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:2.5rem;">
+      <div style="width:48px;height:48px;background:#3b7ff5;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">📊</div>
+      <div>
+        <div style="font-size:20px;font-weight:700;letter-spacing:-.3px;">CSA <span style="color:#3b7ff5;">Dashboard</span></div>
+        <div style="font-size:11px;color:#8899bb;margin-top:2px;font-family:monospace;">Sustentação de Aplicativos · Cebraspe</div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:2.5rem 2.5rem;width:100%;max-width:400px;">
+      <div style="font-size:16px;font-weight:600;margin-bottom:6px;color:#f8faff;">Acesso restrito</div>
+      <div style="font-size:13px;color:#8899bb;margin-bottom:1.75rem;">Use as credenciais fornecidas pela equipe.</div>
+      <div id="loginError" style="display:none;background:rgba(229,62,62,.1);border:1px solid rgba(229,62,62,.25);border-radius:8px;padding:10px 14px;font-size:13px;color:#fc8181;margin-bottom:1rem;"></div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;font-weight:500;">E-mail</label>
+          <input type="email" id="loginEmail" placeholder="usuario@cebraspe.org.br" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;color:#f8faff;font-family:Sora,sans-serif;font-size:13px;outline:none;transition:border .2s;" onfocus="this.style.borderColor=&#39;#3b7ff5&#39;" onblur="this.style.borderColor=&#39;rgba(255,255,255,.08)&#39;">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;font-weight:500;">Senha</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;color:#f8faff;font-family:Sora,sans-serif;font-size:13px;outline:none;transition:border .2s;" onfocus="this.style.borderColor=&#39;#3b7ff5&#39;" onblur="this.style.borderColor=&#39;rgba(255,255,255,.08)&#39;">
+        </div>
+        <button onclick="doLogin()" id="loginBtn" style="margin-top:6px;padding:11px;background:#3b7ff5;border:none;border-radius:8px;color:white;font-family:Sora,sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;">
+          Entrar
+        </button>
+      </div>
+    </div>
+    <div style="margin-top:1.5rem;font-size:11px;color:rgba(136,153,187,.5);text-align:center;">
+      Acesso autorizado apenas para membros da equipe CSA
+    </div>
+  </div>
+</div>
+
+<div id="loading" style="display: none;">
   <div style="font-size:28px;margin-bottom:8px;">📊</div>
   <div class="spinner"></div>
   <div class="loading-text">Carregando CSA Dashboard...</div>
 </div>
 
-<div id="app" style="display:none;">
+<div id="app" style="display: flex;">
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sidebar-logo">
@@ -213,14 +248,18 @@ a.lnk:hover{text-decoration:underline;}
     </div>
     <div class="sidebar-nav">
       <div class="nav-section">Menu</div>
-      <div class="nav-item active" onclick="navTo('historico')"><span class="nav-icon">🗂</span> Histórico</div>
-      <div class="nav-item" onclick="navTo('nova')"><span class="nav-icon">➕</span> Nova Semana</div>
+      <div class="nav-item active" onclick="navTo(&#39;historico&#39;)"><span class="nav-icon">🗂</span> Histórico</div>
+      <div class="nav-item" onclick="navTo(&#39;nova&#39;)"><span class="nav-icon">➕</span> Nova Semana</div>
       <div class="nav-section" style="margin-top:8px;">Análise</div>
-      <div class="nav-item" onclick="navTo('comparativo')"><span class="nav-icon">📈</span> Comparativo</div>
-      <div class="nav-item" onclick="navTo('intercorrencias')"><span class="nav-icon">⚠️</span> Intercorrências</div>
+      <div class="nav-item" onclick="navTo(&#39;comparativo&#39;)"><span class="nav-icon">📈</span> Comparativo</div>
+      <div class="nav-item" onclick="navTo(&#39;intercorrencias&#39;)"><span class="nav-icon">⚠️</span> Intercorrências</div>
     </div>
     <div class="sidebar-bottom">
-      <div class="semanas-count" id="sidebarCount">— semanas salvas</div>
+      <div class="semanas-count" id="sidebarCount">1 semana salva</div>
+      <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <div style="font-size:11px;color:#5a6a8a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="userEmail">sustentacaocsa@cebraspe.org</div>
+        <button onclick="doLogout()" title="Sair" style="background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.15);border-radius:6px;color:#fc8181;font-size:11px;padding:3px 8px;cursor:pointer;white-space:nowrap;transition:all .2s;" onmouseover="this.style.background=&#39;rgba(229,62,62,.18)&#39;" onmouseout="this.style.background=&#39;rgba(229,62,62,.08)&#39;">Sair</button>
+      </div>
     </div>
   </div>
 
@@ -238,15 +277,17 @@ a.lnk:hover{text-decoration:underline;}
           <div class="page-title">Semanas Registradas</div>
           <div class="page-sub">Clique em uma semana para ver o dashboard completo</div>
         </div>
-        <button class="btn primary" onclick="navTo('nova')">➕ Nova semana</button>
+        <button class="btn primary" onclick="navTo(&#39;nova&#39;)">➕ Nova semana</button>
       </div>
-      <div id="semanasGrid" class="semanas-grid">
-        <div class="empty-state">
-          <div class="empty-icon">📭</div>
-          <div class="empty-title">Nenhuma semana ainda</div>
-          <div class="empty-sub">Importe a primeira planilha<br>para começar o histórico.</div>
-        </div>
+      <div id="semanasGrid" class="semanas-grid"><div class="semana-card" onclick="verSemana(&#39;c9971bdf-7e36-41c1-bc8a-3afe969e7305&#39;)">
+      <div class="semana-badge">2026</div>
+      <button class="btn-excluir-card" title="Excluir semana" onclick="event.stopPropagation();confirmarExcluirSemana(&#39;c9971bdf-7e36-41c1-bc8a-3afe969e7305&#39;)">🗑</button>
+      <div class="semana-periodo">📅 25/05/2026 → 29/05/2026</div>
+      <div class="semana-stats">
+        <div class="semana-stat"><strong>109</strong>atividades</div>
+        <div class="semana-stat red"><strong>4</strong>intercorrências</div>
       </div>
+    </div></div>
     </div>
 
     <!-- PÁGINA: NOVA SEMANA -->
@@ -259,7 +300,7 @@ a.lnk:hover{text-decoration:underline;}
       </div>
 
       <!-- UPLOAD -->
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById(&#39;fileInput&#39;).click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
         <div class="upload-icon" id="uploadIcon">📁</div>
         <h3 id="uploadTitle">Importar planilha do Zoho</h3>
         <p id="uploadSub">Arraste ou clique para selecionar o Excel exportado</p>
@@ -310,8 +351,8 @@ a.lnk:hover{text-decoration:underline;}
         <div class="interc-list" id="intercList"></div>
       </div>
 
-      <div style="display:flex;gap:10px;" id="saveActions" style="display:none;">
-        <button class="btn primary" id="btnSalvar" onclick="salvarSemana()" disabled>💾 Salvar semana no banco</button>
+      <div style="display:flex;gap:10px;" id="saveActions">
+        <button class="btn primary" id="btnSalvar" onclick="salvarSemana()" disabled="">💾 Salvar semana no banco</button>
         <button class="btn" onclick="resetNova()">✕ Cancelar</button>
       </div>
     </div>
@@ -319,13 +360,164 @@ a.lnk:hover{text-decoration:underline;}
     <!-- PÁGINA: DASHBOARD (visualização) -->
     <div class="page" id="pageDash">
       <div style="display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;" id="dashActions">
-        <button class="btn" onclick="navTo('historico')">← Voltar</button>
+        <button class="btn" onclick="navTo(&#39;historico&#39;)">← Voltar</button>
         <button class="btn" onclick="exportExcel()">📊 Excel</button>
         <button class="btn" onclick="exportPNG()">🖼 PNG</button>
         <button class="btn primary" onclick="exportPDF()">📄 PDF</button>
         <button class="btn danger" onclick="deletarSemana()">🗑 Excluir</button>
       </div>
-      <div id="dashContent"></div>
+      <div id="dashContent">
+    <div id="dashExport">
+      <div class="dash-header">
+        <div class="dash-title-main">Atividades Entregues — Semana</div>
+        <div class="dash-period-badge">25/05/2026 → 29/05/2026</div>
+      </div>
+      <div class="cards-row">
+        <div class="metric-card"><div class="metric-label">Atividades Entregues</div><div class="metric-value">109</div><div class="metric-sub">tarefas na semana</div></div>
+        <div class="metric-card gold"><div class="metric-label">Projetos Trabalhados</div><div class="metric-value gold">46</div><div class="metric-sub">eventos distintos</div></div>
+        <div class="metric-card red"><div class="metric-label">Intercorrências</div><div class="metric-value red">4</div><div class="metric-sub">registradas na semana</div></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card"><div class="chart-title">Atividades por Dia da Semana</div><div class="chart-wrap"><canvas id="cDia" width="767" height="185" style="display: block; box-sizing: border-box; height: 185px; width: 767px;"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Distribuição por Suporte</div><div class="chart-wrap"><canvas id="cSup" width="767" height="185" style="display: block; box-sizing: border-box; height: 185px; width: 767px;"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Distribuição por Responsável Técnico</div><div class="chart-wrap"><canvas id="cResp" width="767" height="185" style="display: block; box-sizing: border-box; height: 185px; width: 767px;"></canvas></div></div>
+        <div class="chart-card"><div class="chart-title">Top Projetos por Volume</div>
+          <div class="bar-chart" style="height:185px;overflow-y:auto;">
+            <div class="bar-row-m"><span class="bar-label-m" title="Demandas_Sub_Judice">Demandas_Sub_Judice</span><div class="bar-track-m"><div class="bar-fill-m" style="width:100.0%;background:var(--accent);"></div></div><span class="bar-count-m">31</span></div><div class="bar-row-m"><span class="bar-label-m" title="AGU_26_ESTAGIARIO">AGU_26_ESTAGIARIO</span><div class="bar-track-m"><div class="bar-fill-m" style="width:19.4%;background:var(--accent);"></div></div><span class="bar-count-m">6</span></div><div class="bar-row-m"><span class="bar-label-m" title="ANSA_26">ANSA_26</span><div class="bar-track-m"><div class="bar-fill-m" style="width:19.4%;background:var(--accent);"></div></div><span class="bar-count-m">6</span></div><div class="bar-row-m"><span class="bar-label-m" title="DREI_26_EXAME_APTIDAO">DREI_26_EXAME_APTIDAO</span><div class="bar-track-m"><div class="bar-fill-m" style="width:9.7%;background:var(--accent);"></div></div><span class="bar-count-m">3</span></div><div class="bar-row-m"><span class="bar-label-m" title="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</span><div class="bar-track-m"><div class="bar-fill-m" style="width:9.7%;background:var(--accent);"></div></div><span class="bar-count-m">3</span></div><div class="bar-row-m"><span class="bar-label-m" title="TJ_RR_25">TJ_RR_25</span><div class="bar-track-m"><div class="bar-fill-m" style="width:9.7%;background:var(--accent);"></div></div><span class="bar-count-m">3</span></div><div class="bar-row-m"><span class="bar-label-m" title="UDESC_26">UDESC_26</span><div class="bar-track-m"><div class="bar-fill-m" style="width:9.7%;background:var(--accent);"></div></div><span class="bar-count-m">3</span></div><div class="bar-row-m"><span class="bar-label-m" title="CAMARA_MUNICIPAL_BOAVISTA_25">CAMARA_MUNICIPAL_BOAVISTA_25</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div><div class="bar-row-m"><span class="bar-label-m" title="CD_26_PL">CD_26_PL</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div><div class="bar-row-m"><span class="bar-label-m" title="CGM_PORTO_VELHO_RO_26">CGM_PORTO_VELHO_RO_26</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div><div class="bar-row-m"><span class="bar-label-m" title="PAS_SUB_2023_2025_ETAPA_3">PAS_SUB_2023_2025_ETAPA_3</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div><div class="bar-row-m"><span class="bar-label-m" title="PC_DF_26_DELEGADO">PC_DF_26_DELEGADO</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-row">
+        <div class="ic-card">
+          <div class="ic-num">4</div>
+          <div class="ic-lbl">Intercorrências</div>
+          <div class="ic-bdg">4 registradas</div>
+        </div>
+        <div class="table-card">
+          <div class="chart-title">Tabela de Intercorrências</div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Tarefa</th><th>Projeto</th><th>Intercorrência</th><th>Descrição</th><th>Chamado</th></tr></thead>
+            <tbody><tr>
+              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="ABIN_17_02_Abrir prazo para interposição de recursos contra o resultado provisório">ABIN_17_02_Abrir prazo para interposição de recursos contra o resultado provisório</td>
+              <td style="font-size:10px;color:var(--gray);white-space:nowrap;">Demandas_Sub_Judice</td>
+              <td><span class="tag tag-red">Espelho indisponível na página</span></td>
+              <td style="max-width:180px;font-size:11px;color:var(--gray);">Espelho ficou indisponível temporariamente para consulta do candidato. Espelho ajustado</td>
+              <td><a href="https://centraldeservicos.cebraspe.org.br/front/ticket.form.php?id=159154" class="lnk" target="_blank">🔗</a></td>
+            </tr><tr>
+              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="PF_25_04_Abrir prazo para preenchimento da FIC">PF_25_04_Abrir prazo para preenchimento da FIC</td>
+              <td style="font-size:10px;color:var(--gray);white-space:nowrap;">Demandas_Sub_Judice</td>
+              <td><span class="tag tag-red">Erro pra gerar o comprovante do preenchimento da FIC.</span></td>
+              <td style="max-width:180px;font-size:11px;color:var(--gray);">Erro pra gerar o comprovante do preenchimento da FIC. Ajustado.</td>
+              <td><a href="https://centraldeservicos.cebraspe.org.br/front/ticket.form.php?id=158805&amp;" class="lnk" target="_blank">🔗</a></td>
+            </tr><tr>
+              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="Disponibilizar link de consulta individual às salas virtuais do procedimento de confirmação complementar à autodeclaração para pessoas negras (telepresencial) - EXCETO ENGENHARIA">Disponibilizar link de consulta individual às salas virtuais do procedimento de confirmação complementar à autodeclaração para pessoas negras (telepresencial) - EXCETO ENGENHARIA</td>
+              <td style="font-size:10px;color:var(--gray);white-space:nowrap;">ANSA_26</td>
+              <td><span class="tag tag-red">Os candidatos não estavam conseguindo acessar o link de consulta.</span></td>
+              <td style="max-width:180px;font-size:11px;color:var(--gray);">Os candidatos não estavam conseguindo acessar o link de consulta. Ajuste realizado</td>
+              <td><a href="https://centraldeservicos.cebraspe.org.br/front/ticket.form.php?id=159104&amp;" class="lnk" target="_blank">🔗</a></td>
+            </tr><tr>
+              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="Disponibilizar link para upload dos documentos da avaliação de Títulos">Disponibilizar link para upload dos documentos da avaliação de Títulos</td>
+              <td style="font-size:10px;color:var(--gray);white-space:nowrap;">TELEBRAS_25</td>
+              <td><span class="tag tag-red">andidato está tentando realizar o upload de um arquivo para avaliação de títulos, porém a página está apresentando erro durante o processo.</span></td>
+              <td style="max-width:180px;font-size:11px;color:var(--gray);">candidato está tentando realizar o upload de um arquivo para avaliação de títulos, porém a página está apresentando erro durante o processo.
+
+Ajuste realizado, o sistema agora permite o envio de documentação de até 8 mb normalmente.</td>
+              <td><a href="https://centraldeservicos.cebraspe.org.br/front/ticket.form.php?id=159099&amp;" class="lnk" target="_blank">🔗</a></td>
+            </tr></tbody>
+          </table></div>
+        </div>
+      </div>
+
+    <!-- TODAS AS ATIVIDADES -->
+    <div class="table-card" style="margin-top:0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:10px;">
+        <div class="chart-title" style="margin:0;">Todas as Atividades</div>
+        <button onclick="toggleAtividades()" id="btnToggleAtv" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 7px; color: rgb(136, 153, 187); font-family: Sora, sans-serif; font-size: 11px; font-weight: 500; padding: 5px 12px; cursor: pointer; transition: 0.2s;">▲ Recolher atividades</button>
+      </div>
+
+      <!-- FILTROS -->
+      <div id="atvFiltros" style="display: block; margin-bottom: 12px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;">Responsável Técnico</label>
+            <select id="filtroResp" onchange="filtrarAtividades()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;color:#f8faff;font-family:Sora,sans-serif;font-size:12px;outline:none;"><option value="">Todos</option><option value="Enzo">Enzo</option><option value="Henrique Araujo">Henrique Araujo</option><option value="Lester Martin">Lester Martin</option><option value="Pedro Henrique">Pedro Henrique</option><option value="Suporte">Suporte</option></select>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;">Suporte</label>
+            <select id="filtroSup" onchange="filtrarAtividades()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;color:#f8faff;font-family:Sora,sans-serif;font-size:12px;outline:none;"><option value="">Todos</option><option value="Arthur">Arthur</option><option value="Isabella">Isabella</option></select>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;">Evento</label>
+            <select id="filtroEvAtv" onchange="filtrarAtividades()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;color:#f8faff;font-family:Sora,sans-serif;font-size:12px;outline:none;"><option value="">Todos</option><option value="AGU_26_ESTAGIARIO">AGU_26_ESTAGIARIO</option><option value="ANSA_26">ANSA_26</option><option value="ARSAL_26">ARSAL_26</option><option value="CAMARA_MUNICIPAL_BOAVISTA_25">CAMARA_MUNICIPAL_BOAVISTA_25</option><option value="CBM_AL_26">CBM_AL_26</option><option value="CD_25_NS">CD_25_NS</option><option value="CD_26_PL">CD_26_PL</option><option value="CGM_PORTO_VELHO_RO_26">CGM_PORTO_VELHO_RO_26</option><option value="DREI_26_EXAME_APTIDAO">DREI_26_EXAME_APTIDAO</option><option value="Demandas_Sub_Judice">Demandas_Sub_Judice</option><option value="FAPEAL_26">FAPEAL_26</option><option value="FNDE_23_ESPECIALISTA">FNDE_23_ESPECIALISTA</option><option value="FUNPRESP_26_JUD">FUNPRESP_26_JUD</option><option value="PAS_SUB_2023_2025_ETAPA_3">PAS_SUB_2023_2025_ETAPA_3</option><option value="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</option><option value="PC_DF_20_AGENTE">PC_DF_20_AGENTE</option><option value="PC_DF_26_DELEGADO">PC_DF_26_DELEGADO</option><option value="PC_MG_25_TPAG">PC_MG_25_TPAG</option><option value="PF_25">PF_25</option><option value="PGE_AL_26">PGE_AL_26</option><option value="PGE_RN_26">PGE_RN_26</option><option value="PREF_PORTO_ALEGRE_RS_26">PREF_PORTO_ALEGRE_RS_26</option><option value="PREF_PORTO_VELHO_26_PROCURADOR">PREF_PORTO_VELHO_26_PROCURADOR</option><option value="PRF_21_5ª_TURMA">PRF_21_5ª_TURMA</option><option value="SEBRAE_26_PSE_1">SEBRAE_26_PSE_1</option><option value="SEBRAE_26_PSE_2">SEBRAE_26_PSE_2</option><option value="SEDUC_PI_25_PROFESSOR">SEDUC_PI_25_PROFESSOR</option><option value="SEED_SE_25_PROFESSOR">SEED_SE_25_PROFESSOR</option><option value="SEFAZ_RJ_25_ANALISTA">SEFAZ_RJ_25_ANALISTA</option><option value="SEFA_PR_25">SEFA_PR_25</option><option value="SEMA_AM_25">SEMA_AM_25</option><option value="SEMEC_PORTO_VELHO_RO_26">SEMEC_PORTO_VELHO_RO_26</option><option value="SEPLAG_AL_26_ESPECIALISTA">SEPLAG_AL_26_ESPECIALISTA</option><option value="STM_25">STM_25</option><option value="TCE_MS_25">TCE_MS_25</option><option value="TCE_RS_25">TCE_RS_25</option><option value="TELEBRAS_25">TELEBRAS_25</option><option value="TJ_BA_25_NOTARIOS">TJ_BA_25_NOTARIOS</option><option value="TJ_MT_25_NOTARIOS">TJ_MT_25_NOTARIOS</option><option value="TJ_RO_25_NOTARIOS">TJ_RO_25_NOTARIOS</option><option value="TJ_RR_25">TJ_RR_25</option><option value="TRT10_24">TRT10_24</option><option value="UDESC_26">UDESC_26</option><option value="UNB_26_2_TF_DCS">UNB_26_2_TF_DCS</option><option value="UNE_AL_26">UNE_AL_26</option><option value="VESTUNB_26_INDIGENA">VESTUNB_26_INDIGENA</option></select>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:11px;color:#8899bb;font-family:monospace;" id="atvCount">3 atividades encontradas</div>
+          <button onclick="limparFiltrosAtv()" style="background:none;border:none;color:#8899bb;font-size:11px;cursor:pointer;font-family:Sora,sans-serif;text-decoration:underline;padding:0;">
+            Limpar filtros
+          </button>
+        </div>
+      </div>
+
+      <!-- TABELA -->
+      <div id="atvTabela" style="display: block; overflow-x: auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:30%;">Tarefa</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:15%;">Evento</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:10%;">Início</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:10%;">Fim</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:18%;">Responsável</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:10%;">Suporte</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:7%;">Link</th>
+            </tr>
+          </thead>
+          <tbody id="atvTbody"><tr style="border-bottom:1px solid rgba(255,255,255,.03);">
+      <td style="padding:7px 9px;vertical-align:middle;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          
+          <span style="color:rgba(248,250,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;display:block;" title="Disponibilizar link de recursos a favor do gabarito preliminar da prova objetiva da 2ª Turma do CFP (Sub Judice)">Disponibilizar link de recursos a favor do gabarito preliminar da prova objetiva da 2ª Turma do CFP (Sub Judice)</span>
+        </div>
+      </td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;" title="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">26/05</td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">01/06</td>
+      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;" title="Enzo">Enzo</td>
+      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;">Arthur</td>
+      <td style="padding:7px 9px;"><a href="https://projects.zoho.com/portal/download/cebraspeeventos#zp/task-detail/1540914000016026334" style="color:#3b7ff5;font-size:10px;text-decoration:none;" target="_blank">🔗 Zoho</a></td>
+    </tr><tr style="border-bottom:1px solid rgba(255,255,255,.03);">
+      <td style="padding:7px 9px;vertical-align:middle;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          
+          <span style="color:rgba(248,250,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;display:block;" title="Disponibilizar link de recursos contra o gabarito preliminar da prova objetiva da 2ª Turma do CFP (Sub Judice)">Disponibilizar link de recursos contra o gabarito preliminar da prova objetiva da 2ª Turma do CFP (Sub Judice)</span>
+        </div>
+      </td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;" title="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">26/05</td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">01/06</td>
+      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;" title="Enzo">Enzo</td>
+      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;">Arthur</td>
+      <td style="padding:7px 9px;"><a href="https://projects.zoho.com/portal/download/cebraspeeventos#zp/task-detail/1540914000016026326" style="color:#3b7ff5;font-size:10px;text-decoration:none;" target="_blank">🔗 Zoho</a></td>
+    </tr><tr style="border-bottom:1px solid rgba(255,255,255,.03);">
+      <td style="padding:7px 9px;vertical-align:middle;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          
+          <span style="color:rgba(248,250,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;display:block;" title="Disponibilizar a consulta individual do gabarito preliminar e caderno de prova objetiva da 2ª Turma do CFP (Sub Judice)">Disponibilizar a consulta individual do gabarito preliminar e caderno de prova objetiva da 2ª Turma do CFP (Sub Judice)</span>
+        </div>
+      </td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;" title="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">25/05</td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">01/06</td>
+      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;" title="Enzo">Enzo</td>
+      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;">Arthur</td>
+      <td style="padding:7px 9px;"><a href="https://projects.zoho.com/portal/download/cebraspeeventos#zp/task-detail/1540914000016026318" style="color:#3b7ff5;font-size:10px;text-decoration:none;" target="_blank">🔗 Zoho</a></td>
+    </tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    </div></div>
     </div>
 
     <!-- PÁGINA: COMPARATIVO -->
@@ -368,7 +560,7 @@ a.lnk:hover{text-decoration:underline;}
   </div><!-- /main -->
 </div><!-- /app -->
 
-<div id="toast"></div>
+<div id="toast" class="">Semana carregada!</div>
 
 <script>
 const SUPA_URL = 'https://whidfmtcbcxizjzyvnif.supabase.co';
@@ -377,7 +569,14 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const H = {'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};
 
 async function sb(path, opts={}) {
-  const r = await fetch(SUPA_URL+'/rest/v1/'+path, {headers:{...H,'Prefer':'return=representation'}, ...opts});
+  const token = window._session?.access_token || SUPA_KEY;
+  const headers = {
+    'Content-Type': 'application/json',
+    'apikey': SUPA_KEY,
+    'Authorization': 'Bearer ' + token,
+    'Prefer': 'return=representation'
+  };
+  const r = await fetch(SUPA_URL+'/rest/v1/'+path, {headers, ...opts});
   if (!r.ok) { const e = await r.text(); throw new Error(e); }
   const t = await r.text();
   return t ? JSON.parse(t) : [];
@@ -389,7 +588,46 @@ let tasks = [], intercorrencias = [], charts = {};
 let currentSemanaId = null;
 
 // INIT
-async function init() {
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('loginBtn');
+  const errEl = document.getElementById('loginError');
+  if (!email || !pass) { errEl.style.display='block'; errEl.textContent='Preencha e-mail e senha.'; return; }
+  btn.textContent = 'Entrando...'; btn.disabled = true;
+  errEl.style.display = 'none';
+  try {
+    const r = await fetch(SUPA_URL+'/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','apikey':SUPA_KEY},
+      body: JSON.stringify({email, password: pass})
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error_description || data.msg || 'Credenciais inválidas.');
+    window._session = data;
+    localStorage.setItem('csa_session', JSON.stringify(data));
+    document.getElementById('userEmail').textContent = email;
+    document.getElementById('loginScreen').style.display = 'none';
+    await loadApp();
+  } catch(e) {
+    errEl.style.display = 'block';
+    errEl.textContent = e.message;
+    btn.textContent = 'Entrar'; btn.disabled = false;
+  }
+}
+
+async function doLogout() {
+  if (!confirm('Deseja sair do sistema?')) return;
+  window._session = null;
+  localStorage.removeItem('csa_session');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'block';
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+}
+
+async function loadApp() {
+  document.getElementById('loading').style.display = 'flex';
   try {
     await loadSemanas();
     document.getElementById('loading').style.display = 'none';
@@ -397,6 +635,27 @@ async function init() {
   } catch(e) {
     document.getElementById('loading').innerHTML = '<div style="color:#fc8181;font-size:14px;">Erro ao conectar ao banco.<br><small>'+e.message+'</small></div>';
   }
+}
+
+async function init() {
+  // Tenta restaurar sessão salva
+  const saved = localStorage.getItem('csa_session');
+  if (saved) {
+    try {
+      const session = JSON.parse(saved);
+      // Verifica se o token ainda é válido
+      const exp = session.expires_at || 0;
+      if (Date.now() / 1000 < exp) {
+        window._session = session;
+        document.getElementById('userEmail').textContent = session.user?.email || '—';
+        await loadApp();
+        return;
+      }
+    } catch(e) { localStorage.removeItem('csa_session'); }
+  }
+  // Sem sessão válida — mostra login
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'block';
 }
 
 async function loadSemanas() {
@@ -478,6 +737,7 @@ async function verSemana(id) {
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById('pageDash').classList.add('active');
     document.getElementById('topbarTitle').textContent = 'Dashboard · '+fmt(semana.periodo_inicio)+' → '+fmt(semana.periodo_fim);
+    atvExpanded = false;
     renderDashboard(semana);
     showToast('Semana carregada!','success');
   } catch(e) { showToast('Erro: '+e.message,'error'); }
@@ -531,6 +791,70 @@ function renderDashboard(semana) {
           </table></div>
         </div>
       </div>
+
+    <!-- TODAS AS ATIVIDADES -->
+    <div class="table-card" style="margin-top:0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:10px;">
+        <div class="chart-title" style="margin:0;">Todas as Atividades</div>
+        <button onclick="toggleAtividades()" id="btnToggleAtv"
+          style="background:rgba(59,127,245,.1);border:1px solid rgba(59,127,245,.2);border-radius:7px;color:#3b7ff5;font-family:Sora,sans-serif;font-size:11px;font-weight:500;padding:5px 12px;cursor:pointer;transition:all .2s;">
+          ▼ Expandir atividades
+        </button>
+      </div>
+
+      <!-- FILTROS -->
+      <div id="atvFiltros" style="display:none;margin-bottom:12px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;">Responsável Técnico</label>
+            <select id="filtroResp" onchange="filtrarAtividades()"
+              style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;color:#f8faff;font-family:Sora,sans-serif;font-size:12px;outline:none;">
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;">Suporte</label>
+            <select id="filtroSup" onchange="filtrarAtividades()"
+              style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;color:#f8faff;font-family:Sora,sans-serif;font-size:12px;outline:none;">
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;">Evento</label>
+            <select id="filtroEvAtv" onchange="filtrarAtividades()"
+              style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;color:#f8faff;font-family:Sora,sans-serif;font-size:12px;outline:none;">
+              <option value="">Todos</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:11px;color:#8899bb;font-family:monospace;" id="atvCount"></div>
+          <button onclick="limparFiltrosAtv()"
+            style="background:none;border:none;color:#8899bb;font-size:11px;cursor:pointer;font-family:Sora,sans-serif;text-decoration:underline;padding:0;">
+            Limpar filtros
+          </button>
+        </div>
+      </div>
+
+      <!-- TABELA -->
+      <div id="atvTabela" style="display:none;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:30%;">Tarefa</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:15%;">Evento</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:10%;">Início</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:10%;">Fim</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:18%;">Responsável</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:10%;">Suporte</th>
+              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:7%;">Link</th>
+            </tr>
+          </thead>
+          <tbody id="atvTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
     </div>`;
 
   // Charts
@@ -561,6 +885,111 @@ function mkChart(id,type,labels,data,colors){
         tooltip:{backgroundColor:'#1a2d5a',titleColor:'#f8faff',bodyColor:'#8899bb',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,padding:8,titleFont:{family:'Sora',weight:'600'},bodyFont:{family:'Sora'}}},
       scales:type==='bar'?{x:{ticks:{color:'#8899bb',font:{family:'Sora',size:10}},grid:{color:'rgba(255,255,255,0.03)'}},y:{ticks:{color:'#8899bb',font:{family:'Sora',size:10}},grid:{color:'rgba(255,255,255,0.05)'},beginAtZero:true}}:{}}
   });
+}
+
+// ── TABELA DE ATIVIDADES ──
+let atvExpanded = false;
+
+function toggleAtividades() {
+  atvExpanded = !atvExpanded;
+  const filtros = document.getElementById('atvFiltros');
+  const tabela = document.getElementById('atvTabela');
+  const btn = document.getElementById('btnToggleAtv');
+  if (!filtros || !tabela || !btn) return;
+
+  if (atvExpanded) {
+    filtros.style.display = 'block';
+    tabela.style.display = 'block';
+    btn.textContent = '▲ Recolher atividades';
+    btn.style.background = 'rgba(255,255,255,.06)';
+    btn.style.borderColor = 'rgba(255,255,255,.12)';
+    btn.style.color = '#8899bb';
+    popularFiltrosAtv();
+    renderAtvTabela(tasks);
+  } else {
+    filtros.style.display = 'none';
+    tabela.style.display = 'none';
+    btn.textContent = '▼ Expandir atividades';
+    btn.style.background = 'rgba(59,127,245,.1)';
+    btn.style.borderColor = 'rgba(59,127,245,.2)';
+    btn.style.color = '#3b7ff5';
+  }
+}
+
+function popularFiltrosAtv() {
+  // Responsáveis
+  const resps = new Set();
+  tasks.forEach(t => (t.responsaveis||'').split(',').forEach(r => { const tr=r.trim(); if(tr) resps.add(tr); }));
+  const selR = document.getElementById('filtroResp');
+  if (!selR) return;
+  selR.innerHTML = '<option value="">Todos</option>';
+  [...resps].sort().forEach(r => { const op=document.createElement('option'); op.value=r; op.textContent=r; selR.appendChild(op); });
+
+  // Suporte
+  const sups = new Set(tasks.map(t => (t.suporte||'').trim()).filter(Boolean));
+  const selS = document.getElementById('filtroSup');
+  selS.innerHTML = '<option value="">Todos</option>';
+  [...sups].sort().forEach(s => { const op=document.createElement('option'); op.value=s; op.textContent=s; selS.appendChild(op); });
+
+  // Eventos
+  const evs = new Set(tasks.map(t => t.nome_projeto).filter(Boolean));
+  const selE = document.getElementById('filtroEvAtv');
+  selE.innerHTML = '<option value="">Todos</option>';
+  [...evs].sort().forEach(e => { const op=document.createElement('option'); op.value=e; op.textContent=e; selE.appendChild(op); });
+}
+
+function filtrarAtividades() {
+  const resp = document.getElementById('filtroResp')?.value || '';
+  const sup  = document.getElementById('filtroSup')?.value || '';
+  const ev   = document.getElementById('filtroEvAtv')?.value || '';
+
+  const filtradas = tasks.filter(t => {
+    const respMatch = !resp || (t.responsaveis||'').split(',').map(r=>r.trim()).includes(resp);
+    const supMatch  = !sup  || (t.suporte||'').trim() === sup;
+    const evMatch   = !ev   || t.nome_projeto === ev;
+    return respMatch && supMatch && evMatch;
+  });
+
+  renderAtvTabela(filtradas);
+}
+
+function limparFiltrosAtv() {
+  const ids = ['filtroResp','filtroSup','filtroEvAtv'];
+  ids.forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  renderAtvTabela(tasks);
+}
+
+function renderAtvTabela(lista) {
+  const tbody = document.getElementById('atvTbody');
+  const count = document.getElementById('atvCount');
+  if (!tbody) return;
+
+  count.textContent = `${lista.length} atividade${lista.length!==1?'s':''} encontrada${lista.length!==1?'s':''}`;
+
+  if (!lista.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:#8899bb;font-size:12px;">Nenhuma atividade encontrada</td></tr>';
+    return;
+  }
+
+  const fmtD = d => d ? d.slice(5).split('-').reverse().join('/') : '—';
+
+  tbody.innerHTML = lista.map(t => {
+    const hasInterc = intercorrencias.some(ic => ic.nome_tarefa === t.nome_tarefa && ic.nome_projeto === t.nome_projeto);
+    return `<tr style="border-bottom:1px solid rgba(255,255,255,.03);">
+      <td style="padding:7px 9px;vertical-align:middle;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          ${hasInterc ? '<span style="font-size:9px;padding:1px 5px;border-radius:99px;background:rgba(229,62,62,.12);color:#fc8181;border:1px solid rgba(229,62,62,.2);flex-shrink:0;">⚠</span>' : ''}
+          <span style="color:rgba(248,250,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;display:block;" title="${t.nome_tarefa}">${t.nome_tarefa}</span>
+        </div>
+      </td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;" title="${t.nome_projeto}">${t.nome_projeto||'—'}</td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">${fmtD(t.data_inicio)}</td>
+      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">${fmtD(t.data_vencimento)}</td>
+      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;" title="${t.responsaveis}">${t.responsaveis||'—'}</td>
+      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;">${t.suporte||'—'}</td>
+      <td style="padding:7px 9px;">${t.tarefa_url ? `<a href="${t.tarefa_url}" style="color:#3b7ff5;font-size:10px;text-decoration:none;" target="_blank">🔗 Zoho</a>` : '—'}</td>
+    </tr>`;
+  }).join('');
 }
 
 // ── NOVA SEMANA ──
@@ -848,5 +1277,6 @@ function showToast(msg,type){
 
 init();
 </script>
-</body>
-</html>
+
+
+</body></html>
