@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0074)file:///C:/Users/Arthur%20Rodrigues/Downloads/csa_dashboard_system_10.html -->
+<!-- saved from url=(0074)file:///C:/Users/Arthur%20Rodrigues/Downloads/csa_dashboard_system_11.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,7 +58,7 @@ html,body{font-family:'Sora',sans-serif;background:var(--navy3);color:var(--whit
 .semanas-count{font-size:11px;color:var(--gray);text-align:center;font-family:'JetBrains Mono',monospace;}
 
 /* ── MAIN ── */
-#main{margin-left:220px;flex:1;min-height:100vh;display:flex;flex-direction:column;}
+#main{margin-left:220px;flex:1;min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;}
 .topbar{height:56px;background:var(--navy2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;flex-shrink:0;}
 .topbar-title{font-size:15px;font-weight:600;}
 .topbar-actions{display:flex;gap:8px;align-items:center;}
@@ -75,8 +75,8 @@ html,body{font-family:'Sora',sans-serif;background:var(--navy3);color:var(--whit
 .btn:disabled{opacity:.4;cursor:not-allowed;}
 
 /* ── PÁGINAS ── */
-.page{display:none;flex:1;padding:1.5rem;animation:fadeIn .25s ease;}
-.page.active{display:block;}
+.page{position:absolute;inset:0;visibility:hidden;pointer-events:none;padding:1.5rem;animation:fadeIn .25s ease;}
+.page.active{position:relative;inset:auto;visibility:visible;pointer-events:auto;display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
 /* ── PAGE: HISTÓRICO ── */
@@ -199,7 +199,7 @@ a.lnk:hover{text-decoration:underline;}
 
 
 <!-- LOGIN SCREEN -->
-<div id="loginScreen" style="display:none;">
+<div id="loginScreen" style="display: block; position: fixed; inset: 0px; z-index: 200; overflow-y: auto;">
   <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:radial-gradient(ellipse at 30% 20%,rgba(30,79,194,.25) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(59,127,245,.12) 0%,transparent 50%),#0a1428;">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:2.5rem;">
       <div style="width:48px;height:48px;background:#3b7ff5;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">📊</div>
@@ -215,7 +215,7 @@ a.lnk:hover{text-decoration:underline;}
       <div style="display:flex;flex-direction:column;gap:12px;">
         <div style="display:flex;flex-direction:column;gap:5px;">
           <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;font-weight:500;">E-mail</label>
-          <input type="email" id="loginEmail" placeholder="usuario@cebraspe.org.br" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;color:#f8faff;font-family:Sora,sans-serif;font-size:13px;outline:none;transition:border .2s;" onfocus="this.style.borderColor=&#39;#3b7ff5&#39;" onblur="this.style.borderColor=&#39;rgba(255,255,255,.08)&#39;">
+          <input type="email" id="loginEmail" placeholder="usuario@cebraspe.org.br" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 10px 14px; color: rgb(248, 250, 255); font-family: Sora, sans-serif; font-size: 13px; outline: none; transition: border 0.2s;" onfocus="this.style.borderColor=&#39;#3b7ff5&#39;" onblur="this.style.borderColor=&#39;rgba(255,255,255,.08)&#39;">
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;">
           <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;font-weight:500;">Senha</label>
@@ -232,13 +232,13 @@ a.lnk:hover{text-decoration:underline;}
   </div>
 </div>
 
-<div id="loading" style="display: none;">
+<div id="loading" style="position: fixed; inset: 0px; z-index: 100; display: none;">
   <div style="font-size:28px;margin-bottom:8px;">📊</div>
   <div class="spinner"></div>
   <div class="loading-text">Carregando CSA Dashboard...</div>
 </div>
 
-<div id="app" style="display: flex;">
+<div id="app" style="display:none;">
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sidebar-logo">
@@ -255,9 +255,9 @@ a.lnk:hover{text-decoration:underline;}
       <div class="nav-item" onclick="navTo(&#39;intercorrencias&#39;)"><span class="nav-icon">⚠️</span> Intercorrências</div>
     </div>
     <div class="sidebar-bottom">
-      <div class="semanas-count" id="sidebarCount">1 semana salva</div>
+      <div class="semanas-count" id="sidebarCount">— semanas salvas</div>
       <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
-        <div style="font-size:11px;color:#5a6a8a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="userEmail">sustentacaocsa@cebraspe.org</div>
+        <div style="font-size:11px;color:#5a6a8a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="userEmail">—</div>
         <button onclick="doLogout()" title="Sair" style="background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.15);border-radius:6px;color:#fc8181;font-size:11px;padding:3px 8px;cursor:pointer;white-space:nowrap;transition:all .2s;" onmouseover="this.style.background=&#39;rgba(229,62,62,.18)&#39;" onmouseout="this.style.background=&#39;rgba(229,62,62,.08)&#39;">Sair</button>
       </div>
     </div>
@@ -279,15 +279,13 @@ a.lnk:hover{text-decoration:underline;}
         </div>
         <button class="btn primary" onclick="navTo(&#39;nova&#39;)">➕ Nova semana</button>
       </div>
-      <div id="semanasGrid" class="semanas-grid"><div class="semana-card" onclick="verSemana(&#39;c9971bdf-7e36-41c1-bc8a-3afe969e7305&#39;)">
-      <div class="semana-badge">2026</div>
-      <button class="btn-excluir-card" title="Excluir semana" onclick="event.stopPropagation();confirmarExcluirSemana(&#39;c9971bdf-7e36-41c1-bc8a-3afe969e7305&#39;)">🗑</button>
-      <div class="semana-periodo">📅 25/05/2026 → 29/05/2026</div>
-      <div class="semana-stats">
-        <div class="semana-stat"><strong>109</strong>atividades</div>
-        <div class="semana-stat red"><strong>4</strong>intercorrências</div>
+      <div id="semanasGrid" class="semanas-grid">
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <div class="empty-title">Nenhuma semana ainda</div>
+          <div class="empty-sub">Importe a primeira planilha<br>para começar o histórico.</div>
+        </div>
       </div>
-    </div></div>
     </div>
 
     <!-- PÁGINA: NOVA SEMANA -->
