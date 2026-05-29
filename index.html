@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0073)file:///C:/Users/Arthur%20Rodrigues/Downloads/csa_dashboard_system_8.html -->
+<!-- saved from url=(0074)file:///C:/Users/Arthur%20Rodrigues/Downloads/csa_dashboard_system_10.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -366,158 +366,7 @@ a.lnk:hover{text-decoration:underline;}
         <button class="btn primary" onclick="exportPDF()">📄 PDF</button>
         <button class="btn danger" onclick="deletarSemana()">🗑 Excluir</button>
       </div>
-      <div id="dashContent">
-    <div id="dashExport">
-      <div class="dash-header">
-        <div class="dash-title-main">Atividades Entregues — Semana</div>
-        <div class="dash-period-badge">25/05/2026 → 29/05/2026</div>
-      </div>
-      <div class="cards-row">
-        <div class="metric-card"><div class="metric-label">Atividades Entregues</div><div class="metric-value">109</div><div class="metric-sub">tarefas na semana</div></div>
-        <div class="metric-card gold"><div class="metric-label">Projetos Trabalhados</div><div class="metric-value gold">46</div><div class="metric-sub">eventos distintos</div></div>
-        <div class="metric-card red"><div class="metric-label">Intercorrências</div><div class="metric-value red">4</div><div class="metric-sub">registradas na semana</div></div>
-      </div>
-      <div class="charts-row">
-        <div class="chart-card"><div class="chart-title">Atividades por Dia da Semana</div><div class="chart-wrap"><canvas id="cDia" width="767" height="185" style="display: block; box-sizing: border-box; height: 185px; width: 767px;"></canvas></div></div>
-        <div class="chart-card"><div class="chart-title">Distribuição por Suporte</div><div class="chart-wrap"><canvas id="cSup" width="767" height="185" style="display: block; box-sizing: border-box; height: 185px; width: 767px;"></canvas></div></div>
-        <div class="chart-card"><div class="chart-title">Distribuição por Responsável Técnico</div><div class="chart-wrap"><canvas id="cResp" width="767" height="185" style="display: block; box-sizing: border-box; height: 185px; width: 767px;"></canvas></div></div>
-        <div class="chart-card"><div class="chart-title">Top Projetos por Volume</div>
-          <div class="bar-chart" style="height:185px;overflow-y:auto;">
-            <div class="bar-row-m"><span class="bar-label-m" title="Demandas_Sub_Judice">Demandas_Sub_Judice</span><div class="bar-track-m"><div class="bar-fill-m" style="width:100.0%;background:var(--accent);"></div></div><span class="bar-count-m">31</span></div><div class="bar-row-m"><span class="bar-label-m" title="AGU_26_ESTAGIARIO">AGU_26_ESTAGIARIO</span><div class="bar-track-m"><div class="bar-fill-m" style="width:19.4%;background:var(--accent);"></div></div><span class="bar-count-m">6</span></div><div class="bar-row-m"><span class="bar-label-m" title="ANSA_26">ANSA_26</span><div class="bar-track-m"><div class="bar-fill-m" style="width:19.4%;background:var(--accent);"></div></div><span class="bar-count-m">6</span></div><div class="bar-row-m"><span class="bar-label-m" title="DREI_26_EXAME_APTIDAO">DREI_26_EXAME_APTIDAO</span><div class="bar-track-m"><div class="bar-fill-m" style="width:9.7%;background:var(--accent);"></div></div><span class="bar-count-m">3</span></div><div class="bar-row-m"><span class="bar-label-m" title="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</span><div class="bar-track-m"><div class="bar-fill-m" style="width:9.7%;background:var(--accent);"></div></div><span class="bar-count-m">3</span></div><div class="bar-row-m"><span class="bar-label-m" title="TJ_RR_25">TJ_RR_25</span><div class="bar-track-m"><div class="bar-fill-m" style="width:9.7%;background:var(--accent);"></div></div><span class="bar-count-m">3</span></div><div class="bar-row-m"><span class="bar-label-m" title="UDESC_26">UDESC_26</span><div class="bar-track-m"><div class="bar-fill-m" style="width:9.7%;background:var(--accent);"></div></div><span class="bar-count-m">3</span></div><div class="bar-row-m"><span class="bar-label-m" title="CAMARA_MUNICIPAL_BOAVISTA_25">CAMARA_MUNICIPAL_BOAVISTA_25</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div><div class="bar-row-m"><span class="bar-label-m" title="CD_26_PL">CD_26_PL</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div><div class="bar-row-m"><span class="bar-label-m" title="CGM_PORTO_VELHO_RO_26">CGM_PORTO_VELHO_RO_26</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div><div class="bar-row-m"><span class="bar-label-m" title="PAS_SUB_2023_2025_ETAPA_3">PAS_SUB_2023_2025_ETAPA_3</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div><div class="bar-row-m"><span class="bar-label-m" title="PC_DF_26_DELEGADO">PC_DF_26_DELEGADO</span><div class="bar-track-m"><div class="bar-fill-m" style="width:6.5%;background:var(--accent);"></div></div><span class="bar-count-m">2</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="bottom-row">
-        <div class="ic-card">
-          <div class="ic-num">4</div>
-          <div class="ic-lbl">Intercorrências</div>
-          <div class="ic-bdg">4 registradas</div>
-        </div>
-        <div class="table-card">
-          <div class="chart-title">Tabela de Intercorrências</div>
-          <div class="table-wrap"><table>
-            <thead><tr><th>Tarefa</th><th>Projeto</th><th>Intercorrência</th><th>Descrição</th><th>Chamado</th></tr></thead>
-            <tbody><tr>
-              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="ABIN_17_02_Abrir prazo para interposição de recursos contra o resultado provisório">ABIN_17_02_Abrir prazo para interposição de recursos contra o resultado provisório</td>
-              <td style="font-size:10px;color:var(--gray);white-space:nowrap;">Demandas_Sub_Judice</td>
-              <td><span class="tag tag-red">Espelho indisponível na página</span></td>
-              <td style="max-width:180px;font-size:11px;color:var(--gray);">Espelho ficou indisponível temporariamente para consulta do candidato. Espelho ajustado</td>
-              <td><a href="https://centraldeservicos.cebraspe.org.br/front/ticket.form.php?id=159154" class="lnk" target="_blank">🔗</a></td>
-            </tr><tr>
-              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="PF_25_04_Abrir prazo para preenchimento da FIC">PF_25_04_Abrir prazo para preenchimento da FIC</td>
-              <td style="font-size:10px;color:var(--gray);white-space:nowrap;">Demandas_Sub_Judice</td>
-              <td><span class="tag tag-red">Erro pra gerar o comprovante do preenchimento da FIC.</span></td>
-              <td style="max-width:180px;font-size:11px;color:var(--gray);">Erro pra gerar o comprovante do preenchimento da FIC. Ajustado.</td>
-              <td><a href="https://centraldeservicos.cebraspe.org.br/front/ticket.form.php?id=158805&amp;" class="lnk" target="_blank">🔗</a></td>
-            </tr><tr>
-              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="Disponibilizar link de consulta individual às salas virtuais do procedimento de confirmação complementar à autodeclaração para pessoas negras (telepresencial) - EXCETO ENGENHARIA">Disponibilizar link de consulta individual às salas virtuais do procedimento de confirmação complementar à autodeclaração para pessoas negras (telepresencial) - EXCETO ENGENHARIA</td>
-              <td style="font-size:10px;color:var(--gray);white-space:nowrap;">ANSA_26</td>
-              <td><span class="tag tag-red">Os candidatos não estavam conseguindo acessar o link de consulta.</span></td>
-              <td style="max-width:180px;font-size:11px;color:var(--gray);">Os candidatos não estavam conseguindo acessar o link de consulta. Ajuste realizado</td>
-              <td><a href="https://centraldeservicos.cebraspe.org.br/front/ticket.form.php?id=159104&amp;" class="lnk" target="_blank">🔗</a></td>
-            </tr><tr>
-              <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="Disponibilizar link para upload dos documentos da avaliação de Títulos">Disponibilizar link para upload dos documentos da avaliação de Títulos</td>
-              <td style="font-size:10px;color:var(--gray);white-space:nowrap;">TELEBRAS_25</td>
-              <td><span class="tag tag-red">andidato está tentando realizar o upload de um arquivo para avaliação de títulos, porém a página está apresentando erro durante o processo.</span></td>
-              <td style="max-width:180px;font-size:11px;color:var(--gray);">candidato está tentando realizar o upload de um arquivo para avaliação de títulos, porém a página está apresentando erro durante o processo.
-
-Ajuste realizado, o sistema agora permite o envio de documentação de até 8 mb normalmente.</td>
-              <td><a href="https://centraldeservicos.cebraspe.org.br/front/ticket.form.php?id=159099&amp;" class="lnk" target="_blank">🔗</a></td>
-            </tr></tbody>
-          </table></div>
-        </div>
-      </div>
-
-    <!-- TODAS AS ATIVIDADES -->
-    <div class="table-card" style="margin-top:0;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:10px;">
-        <div class="chart-title" style="margin:0;">Todas as Atividades</div>
-        <button onclick="toggleAtividades()" id="btnToggleAtv" style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 7px; color: rgb(136, 153, 187); font-family: Sora, sans-serif; font-size: 11px; font-weight: 500; padding: 5px 12px; cursor: pointer; transition: 0.2s;">▲ Recolher atividades</button>
-      </div>
-
-      <!-- FILTROS -->
-      <div id="atvFiltros" style="display: block; margin-bottom: 12px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
-          <div style="display:flex;flex-direction:column;gap:4px;">
-            <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;">Responsável Técnico</label>
-            <select id="filtroResp" onchange="filtrarAtividades()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;color:#f8faff;font-family:Sora,sans-serif;font-size:12px;outline:none;"><option value="">Todos</option><option value="Enzo">Enzo</option><option value="Henrique Araujo">Henrique Araujo</option><option value="Lester Martin">Lester Martin</option><option value="Pedro Henrique">Pedro Henrique</option><option value="Suporte">Suporte</option></select>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px;">
-            <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;">Suporte</label>
-            <select id="filtroSup" onchange="filtrarAtividades()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;color:#f8faff;font-family:Sora,sans-serif;font-size:12px;outline:none;"><option value="">Todos</option><option value="Arthur">Arthur</option><option value="Isabella">Isabella</option></select>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px;">
-            <label style="font-size:10px;color:#8899bb;text-transform:uppercase;letter-spacing:.06em;">Evento</label>
-            <select id="filtroEvAtv" onchange="filtrarAtividades()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:7px 10px;color:#f8faff;font-family:Sora,sans-serif;font-size:12px;outline:none;"><option value="">Todos</option><option value="AGU_26_ESTAGIARIO">AGU_26_ESTAGIARIO</option><option value="ANSA_26">ANSA_26</option><option value="ARSAL_26">ARSAL_26</option><option value="CAMARA_MUNICIPAL_BOAVISTA_25">CAMARA_MUNICIPAL_BOAVISTA_25</option><option value="CBM_AL_26">CBM_AL_26</option><option value="CD_25_NS">CD_25_NS</option><option value="CD_26_PL">CD_26_PL</option><option value="CGM_PORTO_VELHO_RO_26">CGM_PORTO_VELHO_RO_26</option><option value="DREI_26_EXAME_APTIDAO">DREI_26_EXAME_APTIDAO</option><option value="Demandas_Sub_Judice">Demandas_Sub_Judice</option><option value="FAPEAL_26">FAPEAL_26</option><option value="FNDE_23_ESPECIALISTA">FNDE_23_ESPECIALISTA</option><option value="FUNPRESP_26_JUD">FUNPRESP_26_JUD</option><option value="PAS_SUB_2023_2025_ETAPA_3">PAS_SUB_2023_2025_ETAPA_3</option><option value="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</option><option value="PC_DF_20_AGENTE">PC_DF_20_AGENTE</option><option value="PC_DF_26_DELEGADO">PC_DF_26_DELEGADO</option><option value="PC_MG_25_TPAG">PC_MG_25_TPAG</option><option value="PF_25">PF_25</option><option value="PGE_AL_26">PGE_AL_26</option><option value="PGE_RN_26">PGE_RN_26</option><option value="PREF_PORTO_ALEGRE_RS_26">PREF_PORTO_ALEGRE_RS_26</option><option value="PREF_PORTO_VELHO_26_PROCURADOR">PREF_PORTO_VELHO_26_PROCURADOR</option><option value="PRF_21_5ª_TURMA">PRF_21_5ª_TURMA</option><option value="SEBRAE_26_PSE_1">SEBRAE_26_PSE_1</option><option value="SEBRAE_26_PSE_2">SEBRAE_26_PSE_2</option><option value="SEDUC_PI_25_PROFESSOR">SEDUC_PI_25_PROFESSOR</option><option value="SEED_SE_25_PROFESSOR">SEED_SE_25_PROFESSOR</option><option value="SEFAZ_RJ_25_ANALISTA">SEFAZ_RJ_25_ANALISTA</option><option value="SEFA_PR_25">SEFA_PR_25</option><option value="SEMA_AM_25">SEMA_AM_25</option><option value="SEMEC_PORTO_VELHO_RO_26">SEMEC_PORTO_VELHO_RO_26</option><option value="SEPLAG_AL_26_ESPECIALISTA">SEPLAG_AL_26_ESPECIALISTA</option><option value="STM_25">STM_25</option><option value="TCE_MS_25">TCE_MS_25</option><option value="TCE_RS_25">TCE_RS_25</option><option value="TELEBRAS_25">TELEBRAS_25</option><option value="TJ_BA_25_NOTARIOS">TJ_BA_25_NOTARIOS</option><option value="TJ_MT_25_NOTARIOS">TJ_MT_25_NOTARIOS</option><option value="TJ_RO_25_NOTARIOS">TJ_RO_25_NOTARIOS</option><option value="TJ_RR_25">TJ_RR_25</option><option value="TRT10_24">TRT10_24</option><option value="UDESC_26">UDESC_26</option><option value="UNB_26_2_TF_DCS">UNB_26_2_TF_DCS</option><option value="UNE_AL_26">UNE_AL_26</option><option value="VESTUNB_26_INDIGENA">VESTUNB_26_INDIGENA</option></select>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div style="font-size:11px;color:#8899bb;font-family:monospace;" id="atvCount">3 atividades encontradas</div>
-          <button onclick="limparFiltrosAtv()" style="background:none;border:none;color:#8899bb;font-size:11px;cursor:pointer;font-family:Sora,sans-serif;text-decoration:underline;padding:0;">
-            Limpar filtros
-          </button>
-        </div>
-      </div>
-
-      <!-- TABELA -->
-      <div id="atvTabela" style="display: block; overflow-x: auto;">
-        <table style="width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;">
-          <thead>
-            <tr>
-              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:30%;">Tarefa</th>
-              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:15%;">Evento</th>
-              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:10%;">Início</th>
-              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:10%;">Fim</th>
-              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:18%;">Responsável</th>
-              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:10%;">Suporte</th>
-              <th style="text-align:left;padding:7px 9px;color:#8899bb;font-weight:500;text-transform:uppercase;font-size:9px;letter-spacing:.06em;border-bottom:1px solid rgba(255,255,255,.06);width:7%;">Link</th>
-            </tr>
-          </thead>
-          <tbody id="atvTbody"><tr style="border-bottom:1px solid rgba(255,255,255,.03);">
-      <td style="padding:7px 9px;vertical-align:middle;">
-        <div style="display:flex;align-items:center;gap:6px;">
-          
-          <span style="color:rgba(248,250,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;display:block;" title="Disponibilizar link de recursos a favor do gabarito preliminar da prova objetiva da 2ª Turma do CFP (Sub Judice)">Disponibilizar link de recursos a favor do gabarito preliminar da prova objetiva da 2ª Turma do CFP (Sub Judice)</span>
-        </div>
-      </td>
-      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;" title="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</td>
-      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">26/05</td>
-      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">01/06</td>
-      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;" title="Enzo">Enzo</td>
-      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;">Arthur</td>
-      <td style="padding:7px 9px;"><a href="https://projects.zoho.com/portal/download/cebraspeeventos#zp/task-detail/1540914000016026334" style="color:#3b7ff5;font-size:10px;text-decoration:none;" target="_blank">🔗 Zoho</a></td>
-    </tr><tr style="border-bottom:1px solid rgba(255,255,255,.03);">
-      <td style="padding:7px 9px;vertical-align:middle;">
-        <div style="display:flex;align-items:center;gap:6px;">
-          
-          <span style="color:rgba(248,250,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;display:block;" title="Disponibilizar link de recursos contra o gabarito preliminar da prova objetiva da 2ª Turma do CFP (Sub Judice)">Disponibilizar link de recursos contra o gabarito preliminar da prova objetiva da 2ª Turma do CFP (Sub Judice)</span>
-        </div>
-      </td>
-      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;" title="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</td>
-      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">26/05</td>
-      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">01/06</td>
-      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;" title="Enzo">Enzo</td>
-      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;">Arthur</td>
-      <td style="padding:7px 9px;"><a href="https://projects.zoho.com/portal/download/cebraspeeventos#zp/task-detail/1540914000016026326" style="color:#3b7ff5;font-size:10px;text-decoration:none;" target="_blank">🔗 Zoho</a></td>
-    </tr><tr style="border-bottom:1px solid rgba(255,255,255,.03);">
-      <td style="padding:7px 9px;vertical-align:middle;">
-        <div style="display:flex;align-items:center;gap:6px;">
-          
-          <span style="color:rgba(248,250,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;display:block;" title="Disponibilizar a consulta individual do gabarito preliminar e caderno de prova objetiva da 2ª Turma do CFP (Sub Judice)">Disponibilizar a consulta individual do gabarito preliminar e caderno de prova objetiva da 2ª Turma do CFP (Sub Judice)</span>
-        </div>
-      </td>
-      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;" title="PC_DF_19_ESCRIVAO">PC_DF_19_ESCRIVAO</td>
-      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">25/05</td>
-      <td style="padding:7px 9px;font-size:10px;color:#8899bb;white-space:nowrap;">01/06</td>
-      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;" title="Enzo">Enzo</td>
-      <td style="padding:7px 9px;font-size:11px;color:rgba(248,250,255,.7);white-space:nowrap;">Arthur</td>
-      <td style="padding:7px 9px;"><a href="https://projects.zoho.com/portal/download/cebraspeeventos#zp/task-detail/1540914000016026318" style="color:#3b7ff5;font-size:10px;text-decoration:none;" target="_blank">🔗 Zoho</a></td>
-    </tr></tbody>
-        </table>
-      </div>
-    </div>
-
-    </div></div>
+      <div id="dashContent"></div>
     </div>
 
     <!-- PÁGINA: COMPARATIVO -->
@@ -560,7 +409,7 @@ Ajuste realizado, o sistema agora permite o envio de documentação de até 8 mb
   </div><!-- /main -->
 </div><!-- /app -->
 
-<div id="toast" class="">Semana carregada!</div>
+<div id="toast"></div>
 
 <script>
 const SUPA_URL = 'https://whidfmtcbcxizjzyvnif.supabase.co';
@@ -1244,10 +1093,114 @@ async function exportPDF(){
   const{jsPDF}=window.jspdf;
   const el=document.getElementById('dashExport');
   if(!el) return;
-  const canvas=await html2canvas(el,{backgroundColor:'#0a1428',scale:2,useCORS:true});
-  const pdf=new jsPDF({orientation:'landscape',unit:'px',format:[canvas.width/2,canvas.height/2]});
-  pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,canvas.width/2,canvas.height/2);
+
+  showToast('Gerando PDF...','');
+
+  // Separa a área principal (sem a tabela de atividades) da tabela
+  const atvSection = document.getElementById('atvTabela');
+  const atvFiltros = document.getElementById('atvFiltros');
+  const atvExpanded = atvSection && atvSection.style.display !== 'none';
+
+  // Captura o dashboard principal (sempre)
+  // Temporariamente esconde a tabela expandida para capturar só o dash
+  if(atvExpanded){
+    atvSection.style.display='none';
+    atvFiltros.style.display='none';
+  }
+
+  const canvasDash = await html2canvas(el, {backgroundColor:'#0a1428', scale:2, useCORS:true, logging:false});
+
+  if(atvExpanded){
+    atvSection.style.display='block';
+    atvFiltros.style.display='block';
+  }
+
+  // Tamanho A4 landscape em px a 150dpi
+  const PAGE_W = 1123;
+  const PAGE_H = 794;
+
+  const pdf = new jsPDF({orientation:'landscape', unit:'px', format:[PAGE_W, PAGE_H]});
+
+  // Página 1 — dashboard principal (escala para caber na página)
+  const dashW = canvasDash.width / 2;
+  const dashH = canvasDash.height / 2;
+  const scaleToFit = Math.min(PAGE_W / dashW, PAGE_H / dashH);
+  const fitW = dashW * scaleToFit;
+  const fitH = dashH * scaleToFit;
+  const offsetX = (PAGE_W - fitW) / 2;
+  const offsetY = (PAGE_H - fitH) / 2;
+  pdf.addImage(canvasDash.toDataURL('image/png'), 'PNG', offsetX, offsetY, fitW, fitH);
+
+  // Se atividades expandidas — adiciona páginas com a tabela
+  if(atvExpanded){
+    const tbody = document.getElementById('atvTbody');
+    const atvCount = document.getElementById('atvCount');
+    if(tbody && tbody.children.length > 0){
+
+      // Captura a tabela inteira em canvas
+      const tableWrapper = document.getElementById('atvTabela');
+      const canvasAtv = await html2canvas(tableWrapper, {
+        backgroundColor:'#0a1428', scale:2, useCORS:true, logging:false
+      });
+
+      const totalH = canvasAtv.height / 2;
+      const totalW = canvasAtv.width / 2;
+
+      // Escala para largura da página com margem
+      const MARGIN = 40;
+      const usableW = PAGE_W - MARGIN * 2;
+      const usableH = PAGE_H - MARGIN * 2;
+      const imgScale = usableW / totalW;
+      const scaledH = totalH * imgScale;
+      const scaledW = usableW;
+
+      // Quantas páginas precisamos?
+      let yOffset = 0;
+      let pageNum = 0;
+
+      while(yOffset < scaledH){
+        pdf.addPage([PAGE_W, PAGE_H], 'landscape');
+
+        // Cabeçalho da página
+        pdf.setFillColor(26, 45, 90);
+        pdf.rect(0, 0, PAGE_W, 36, 'F');
+        pdf.setFontSize(11);
+        pdf.setTextColor(248, 250, 255);
+        pdf.text('CSA Dashboard · Cebraspe — Atividades da Semana', MARGIN, 23);
+        const countTxt = atvCount?.textContent || '';
+        pdf.setFontSize(9);
+        pdf.setTextColor(136, 153, 187);
+        pdf.text(countTxt, PAGE_W - MARGIN, 23, {align:'right'});
+
+        const availH = usableH - 36;
+        const sliceH = Math.min(availH, scaledH - yOffset);
+
+        // Recorta a fatia do canvas original correspondente a esta página
+        const srcY = (yOffset / imgScale) * 2; // volta para coords do canvas (scale:2)
+        const srcH = (sliceH / imgScale) * 2;
+        const srcW = canvasAtv.width;
+
+        const sliceCanvas = document.createElement('canvas');
+        sliceCanvas.width = srcW;
+        sliceCanvas.height = srcH;
+        const ctx = sliceCanvas.getContext('2d');
+        ctx.drawImage(canvasAtv, 0, srcY, srcW, srcH, 0, 0, srcW, srcH);
+
+        pdf.addImage(sliceCanvas.toDataURL('image/png'), 'PNG', MARGIN, 36 + MARGIN/2, scaledW, sliceH);
+
+        // Rodapé com número de página
+        pdf.setFontSize(9);
+        pdf.setTextColor(136, 153, 187);
+        pdf.text(`Página ${pageNum + 2}`, PAGE_W / 2, PAGE_H - 12, {align:'center'});
+
+        yOffset += sliceH;
+        pageNum++;
+      }
+    }
+  }
+
   pdf.save(`CSA_Dashboard_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.pdf`);
+  showToast('PDF exportado!','success');
 }
 async function exportExcel(){
   await window._libsReady;
